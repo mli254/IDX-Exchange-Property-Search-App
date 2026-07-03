@@ -2,29 +2,38 @@ import dotenv from "dotenv/config"; // needs to be the very first import
 import mysql from 'mysql2/promise';
 import express from 'express';
 import cors from 'cors';
+import { pool } from "./db.js"
 
 const app = express();
-const port = 5000;
 
 app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.get('/api/health', async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res
+      .status(200)
+      .json({ 
+        status: "ok",
+        database: "connected" 
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        status: "internal server error", 
+        database: "disconnected", 
+        message: error 
+      });
+  }
 });
 
-const connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  port: process.env.MYSQL_PORT,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+app.listen(process.env.SERVER_PORT || 5000, () => {
+  console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL database!');
-});
