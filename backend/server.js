@@ -2,7 +2,8 @@ import dotenv from "dotenv/config"; // needs to be the very first import
 import mysql from 'mysql2/promise';
 import express from 'express';
 import cors from 'cors';
-import { pool } from "./db.js"
+import { pool } from "./db.js";
+import propertiesRouter from "./routes/properties.js"
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.get('/api/health', async (req, res) => {
       });
   }
 });
+
+app.use("/api/properties", propertiesRouter);
 
 app.listen(process.env.SERVER_PORT || 5000, () => {
   console.log(`Server listening on port ${process.env.SERVER_PORT}`);
