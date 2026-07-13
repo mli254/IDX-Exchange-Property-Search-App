@@ -1,12 +1,10 @@
-// import dotenv from "dotenv/config"; // needs to be the very first import
-import mysql from 'mysql2/promise';
 import express from 'express';
 import { pool } from "../db.js";
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    // Est. default values
+    // est. default values
     let limit = 20;
     let offset = 0;
     let city = "";
@@ -15,15 +13,17 @@ router.get('/', async (req, res) => {
     let maxPrice = 0;
     let beds = 0;
     let baths = 0;
+
+    // incrementally append new param values as the conditions are handled below
     let wherequery = "";
     const columns = [];
-    const values = []; // incrementally append new param as the conditions are handled below
-    
+    const values = []; 
 
-    // Handling query params
+    // handling query params
     if (req.query.limit) {
         limit = parseInt(req.query.limit);
 
+        // ![param] used to catch NaN or other values, with the specific exclusion of 0
         if (!limit && limit !== 0) {
             return res
             .status(400)
@@ -33,6 +33,7 @@ router.get('/', async (req, res) => {
             });
         }
 
+        // limit must be between 1 and 100
         if (limit > 100 || limit < 1) {
             return res
             .status(400)
@@ -68,6 +69,7 @@ router.get('/', async (req, res) => {
     if (req.query.city) {
         city = req.query.city;
 
+        // just to catch any potential issues
         if (!city) {
             return res
             .status(400)
@@ -77,6 +79,8 @@ router.get('/', async (req, res) => {
             });
         }
 
+        // due to inconsistent whitespaces/casing, both sides of the query will need the additional modifiers
+        // the parameterized comparison and value are then pushed to corresponding arrays
         columns.push("LOWER(TRIM(L_City)) = LOWER(TRIM(?))");
         values.push(city);
     }
@@ -197,21 +201,26 @@ router.get('/', async (req, res) => {
         values.push(baths);
     }
 
+    // create the query string; wherequery is blank if no filters are applied/supplied
     if (columns.length) {
         wherequery = "WHERE " + columns.join(" AND ");
     } else {
         wherequery = "";
     }
+
     try {
-        // const count = await pool.query(`SELECT COUNT(L_Address) FROM rets_property`);
-        // const result = await pool.query(`SELECT L_ListingID, LM_Dec_3 FROM rets_property ORDER BY L_ListingID LIMIT 20;`);
+        // want to count the full number/amount of rows returned for a given query
         const count = await pool.query(`SELECT COUNT(*) AS total FROM rets_property ${wherequery};`, values);
+        
+        // for cleanliness of viewing, only selecting the rows we're filtering instead of the full row; 
+        // this can be modified in the future
+        // an ORDER BY L_ListingID command is used to ensure the results are consistent
+        // 'AS' keyword allows customization of display names for fields in order to make output more readable 
         const result = await pool.query(
-            `SELECT L_ListingID, L_City, L_Zip, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths
+            `SELECT L_ListingID AS ListingID, L_City AS City, L_Zip AS Zipcode, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths
             FROM rets_property ${wherequery} ORDER BY L_ListingID
             LIMIT ? OFFSET ?;`, [...values, limit, offset]
         );
-        console.log(count[0][0]["total"]);
         return res
         .status(200)
         .json({
@@ -225,7 +234,6 @@ router.get('/', async (req, res) => {
         .status(500)
         .json({
             status: "internal server error", 
-            database: "disconnected", 
             message: error 
         });
     }    
