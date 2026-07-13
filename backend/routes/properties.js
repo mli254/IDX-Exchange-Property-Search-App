@@ -1,7 +1,27 @@
 import express from 'express';
 import { pool } from "../db.js";
+import { parse } from 'dotenv';
 
 const router = express.Router();
+
+// inspired by Ray, refactored my repeated error handling code into a single function
+function paramValidation (param, label, min=null, max=null) {
+    let parsedParam = parseInt(param);
+
+    if (!parsedParam && parsedParam !== 0) {
+        return { error: `Please ensure ${label} parameter is a numeric whole number.` };
+    }
+
+    if (min !== null && parsedParam < min) {
+        return { error: `Please ensure ${label} parameter is greater than ${min}` };
+    }
+
+    if (max !== null && parsedParam > max) {
+        return { error: `Please ensure ${label} parameter is less than ${max}` };
+    }
+
+    return { parsedParam };
+}
 
 router.get('/', async (req, res) => {
     // est. default values
@@ -21,49 +41,23 @@ router.get('/', async (req, res) => {
 
     // handling query params
     if (req.query.limit) {
-        limit = parseInt(req.query.limit);
+        const check = paramValidation(req.query.limit, "limit", 1, 100);
 
-        // ![param] used to catch NaN or other values, with the specific exclusion of 0
-        if (!limit && limit !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure limit parameter is a numeric whole number."
-            });
+        if (check.error) {
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        // limit must be between 1 and 100
-        if (limit > 100 || limit < 1) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure limit parameter is between 1-100."
-            });
-        }
+        limit = check.parsedParam;
     }
 
     if (req.query.offset) {
-        offset = parseInt(req.query.offset);
+        const check = paramValidation(req.query.offset, "offset", 0);
 
-        if (!offset && offset !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure offset parameter is a numeric whole number."
-            });
+        if (check.error) { 
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        if (offset < 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure offset is not negative."
-            });
-        }
+        offset = check.parsedParam;
     } 
 
     if (req.query.city) {
@@ -102,100 +96,52 @@ router.get('/', async (req, res) => {
     }
 
     if (req.query.minPrice) {
-        minPrice = parseInt(req.query.minPrice);
+        const check = paramValidation(req.query.minPrice, "minPrice", 0);
 
-        if (!minPrice && minPrice !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure minPrice parameter is a numeric whole number."
-            });
+        if (check.error) { 
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        if (minPrice < 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure minPrice is not negative."
-            });
-        }
+        minPrice = check.parsedParam;
 
         columns.push("L_SystemPrice >= ?");
         values.push(minPrice);
     }
 
     if (req.query.maxPrice) {
-        maxPrice = parseInt(req.query.maxPrice);
+        const check = paramValidation(req.query.maxPrice, "maxPrice", 0);
 
-        if (!maxPrice && maxPrice !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure maxPrice parameter is a numeric whole number."
-            });
+        if (check.error) {
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        if (maxPrice < 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure maxPrice is not negative."
-            });
-        }
+        maxPrice = check.parsedParam;
 
         columns.push("L_SystemPrice <= ?");
         values.push(maxPrice);
     }
 
     if (req.query.beds) {
-        beds = parseInt(req.query.beds);
+        const check = paramValidation(req.query.beds, "beds", 0);
 
-        if (!beds && beds !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure beds parameter is a numeric whole number."
-            });
+        if (check.error) {
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        if (beds < 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure beds is not negative."
-            });
-        }
+        beds = check.parsedParam;
 
         columns.push("L_Keyword2 = ?");
         values.push(beds);
     }
 
     if (req.query.baths) {
-        baths = parseInt(req.query.baths);
+        const check = paramValidation(req.query.baths, "baths", 0);
 
-        if (!baths && baths !== 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure baths parameter is a numeric whole number."
-            });
+        if (check.error) {
+            return res.status(400).json({ status: "bad request", message: check.error });
         }
 
-        if (baths < 0) {
-            return res
-            .status(400)
-            .json({
-                status: "bad request",
-                message: "Please ensure baths is not negative."
-            });
-        }
+        baths = check.parsedParam;
 
         columns.push("LM_Dec_3 = ?");
         values.push(baths);
