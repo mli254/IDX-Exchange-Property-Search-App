@@ -63,7 +63,7 @@ Currently, these include:
 ### SQL Setup
 To speed up database queries, indexes are created on commonly accessed columns:
 
-```bash
+```sql
 CREATE INDEX idx_zipcode ON rets_property (L_Zip);
 CREATE INDEX idx_price ON rets_property (L_SystemPrice);
 CREATE INDEX idx_beds ON rets_property (L_Keyword2);
@@ -141,7 +141,7 @@ The `400` HTTP code refers to a bad request, which indicates an error on the cli
 The server will output a descriptive error message if an invalid parameter is inputted, such as "limit exceeds range of 1-100". 
 
 To access this endpoint:
-```
+```bash
 curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&city=[city_name]&zipcode=[zipcode]&minPrice=[num]&maxPrice=[num]&beds=[num]&baths=[num]
 ```
 Users should replace the placeholders in brackets, and only including the parameters needed, as all are optional.
