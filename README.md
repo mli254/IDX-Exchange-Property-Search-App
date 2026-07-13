@@ -30,7 +30,8 @@ $ docker exec -i idx-mysql-local mysql rets -uroot -p'[password]' < [path to sql
 Then, to run the container and enter any SQL commands:
 
 ```bash
-$ docker exec -it idx-mysql-local bash mysql -uroot -p
+$ docker exec -it idx-mysql-local bash 
+$ mysql -uroot -p
 ```
 The `-p` should prompt the database's password, after which users can enter SQL commands into the bash shell.
 
@@ -110,17 +111,17 @@ curl http://localhost:5000/api/health
 ```
 
 ### `GET /api/properties`
-A endpoint that allows for paginated filtering of the MySQL data using a variety of query parameters. 
+An endpoint that allows for paginated filtering of the MySQL data using a variety of query parameters. 
 
 Accepts the following filters:
 - `limit`
-    - an `integer` between 1-100; defaults to 20. 
+    - an `integer` between 1-100 that determines how many rows to display; defaults to 20. 
 - `offset`
-    - an `integer` that dictates the number of rows to skip; defaults to 0. 
+    - an `integer` that dictates the number of rows to skip; defaults to 0, and cannot be negative. 
 - `city`
-    - `string` that ignores whitespace and is case-insensitive.
+    - `string` that represents a city name; ignores surrounding whitespace and is case-insensitive.
 - `zipcode`
-    - `string` type parameter
+    - `string` that represents a postal code.
 - `minPrice`
      - `integer` that dictates the lower price bound; cannot be less than 0.
 - `maxPrice`
@@ -132,7 +133,7 @@ Accepts the following filters:
 
 | Condition | Status | Response |
 |-----------|--------|----------|
-| Successful Filtering | `200` | `{ "total": [num], "limit": [limit], "offset": [offset], "results": [ ... ] }` |
+| Successful Filtering | `200` | `{ "total": [count], "limit": [limit], "offset": [offset], "results": [ ... ] }` |
 | Invalid Parameter | `400` | `{status: "bad request", message: invalid [param]: ...}` |
 
 The `400` HTTP code refers to a bad request, which indicates an error on the client side. 
@@ -143,4 +144,4 @@ To access this endpoint:
 ```
 curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&city=[city_name]&zipcode=[zipcode]&minPrice=[num]&maxPrice=[num]&beds=[num]&baths=[num]
 ```
-Replacing the placeholders in brackets, and only including the parameters needed, as all are optional.
+Users should replace the placeholders in brackets, and only including the parameters needed, as all are optional.
