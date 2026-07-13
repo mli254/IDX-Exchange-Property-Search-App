@@ -62,6 +62,14 @@ Currently, these include:
 ### SQL Setup
 To speed up database queries, indexes are created on commonly accessed columns:
 
+```bash
+CREATE INDEX idx_zipcode ON rets_property (L_Zip);
+CREATE INDEX idx_price ON rets_property (L_SystemPrice);
+CREATE INDEX idx_beds ON rets_property (L_Keyword2);
+CREATE INDEX idx_baths ON rets_property (LM_Dec_3);
+CREATE INDEX idx_city_price ON rets_property ((LOWER(TRIM(L_City))), L_SystemPrice);
+```
+
 ## Running the App
 ### 1. Docker / SQL
 ```bash
