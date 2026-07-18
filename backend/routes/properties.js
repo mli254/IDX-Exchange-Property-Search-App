@@ -171,7 +171,7 @@ router.get('/:id/openhouses', async (req, res) => {
             return res.status(404).json({ status: "not found", error: "No listing was found with that ID." });
         }
 
-        const [openhouses] = await pool.query(`SELECT * FROM rets_openhouse WHERE L_ListingID = ? ORDER BY OH_StartDate, OH_StartTime`, req.params.id);
+        const [openhouses] = await pool.query(`SELECT * FROM rets_openhouse WHERE L_ListingID = ? ORDER BY OpenHouseDate, OH_StartTime`, req.params.id);
         return res.status(200).json({openhouses: openhouses});
     } catch (err) {
         return res.status(500).json({ status: "internal server error", error: err });
