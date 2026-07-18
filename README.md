@@ -134,14 +134,48 @@ Accepts the following filters:
 | Condition | Status | Response |
 |-----------|--------|----------|
 | Successful Filtering | `200` | `{ "total": [count], "limit": [limit], "offset": [offset], "results": [ ... ] }` |
-| Invalid Parameter | `400` | `{status: "bad request", message: invalid [param]: ...}` |
+| Invalid Parameter Type | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is a numeric whole number."}` |
+| Invalid Parameter Range (Min) | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is greater than [min]"}` |
+| Invalid Parameter Range (Max) | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is less than [max]"}` |
 
 The `400` HTTP code refers to a bad request, which indicates an error on the client side. 
-
-The server will output a descriptive error message if an invalid parameter is inputted, such as "limit exceeds range of 1-100". 
 
 To access this endpoint:
 ```bash
 curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&city=[city_name]&zipcode=[zipcode]&minPrice=[num]&maxPrice=[num]&beds=[num]&baths=[num]
 ```
 Users should replace the placeholders in brackets, and only including the parameters needed, as all are optional.
+
+### `GET /api/properties/:id`
+An endpoint that, given a property's ID, returns all the data associated with that property.
+
+| Condition | Status | Response |
+|-----------|--------|----------|
+| Success | `200` | `{ "results": [...] }`
+| Invalid Parameter Type | `400` | `status: "bad request", message: "Please ensure listing ID is numeric."`
+| Invalid Parameter Range | `400` | `status: "bad request", message: "Please ensure listing ID is between 100000000 and 9999999999."`
+| Unknown Property ID | `404` | `status: "not found", message: "No listing was found for ID [id]."`
+
+The `404` HTTP code refers to the "not found" error, where a requested resource could not be located by the server. 
+
+To access the endpoint:
+
+```bash
+curl http://localhost:5000/api/properties/[id]
+```
+
+### `GET /api/properties/:id/openhouses`
+An endpoint that returns all the openhouse events for a given property ID. If that property has no openhouse events, an empty array is returned.
+
+| Condition | Status | Response |
+|-----------|--------|----------|
+| Success | `200` | `{ "openhouses": [...] }`
+| Invalid Parameter Type | `400` | `status: "bad request", message: "Please ensure listing ID is numeric."`
+| Invalid Parameter Range | `400` | `status: "bad request", message: "Please ensure listing ID is between 100000000 and 9999999999."`
+| Unknown Property ID | `404` | `status: "not found", message: "No listing was found for ID [id]."`
+
+To access the endpoint:
+
+```bash
+curl http://localhost:5000/api/properties/[id]/openhouses
+```

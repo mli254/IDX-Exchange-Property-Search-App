@@ -147,6 +147,12 @@ router.get('/:id/openhouses', async (req, res) => {
         return res.status(400).json({ status: "bad request", error: "Please include a listing ID." });
     }
 
+    // Checking if ID is malformed, based off the current smallest/largest IDs:
+    //      smallest:   421653666   (9 digits)
+    //      largest:    1174733202  (10 digits)
+    // ERROR: There is an ID that exists in rets_openhouse but not rets_property; unsure if this is the specific ID
+    //      as mentioned in the PDF, but making note of it:
+    //      id:         552066853
     const parsedId = parseInt(req.params.id);
 
     if (isNaN(parsedId)) {
@@ -157,6 +163,8 @@ router.get('/:id/openhouses', async (req, res) => {
     }
 
     try {
+        // first querying rets_property to see if ID exists within the larger database
+        // NOTE: id = 552066853 exists in rets_openhouse, but not rets_property
         const [result] = await pool.query(
             `SELECT L_ListingID FROM rets_property WHERE L_ListingID = ?`, req.params.id);
         if (result.length < 1) {
