@@ -142,4 +142,60 @@ router.get('/', async (req, res) => {
     }    
 });
 
+router.get('/:id/openhouses', async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ status: "bad request", error: "Please include a listing ID." });
+    }
+
+    const parsedId = parseInt(req.params.id);
+
+    if (isNaN(parsedId)) {
+        return res.status(400).json({ status: "bad request", error: "Please ensure listing ID is numeric." });
+    }
+    if (parsedId > 9999999999 || parsedId < 100000000) {
+        return res.status(400).json({ status: "bad request", error: "Please ensure listing ID is between 100000000 and 9999999999." });
+    }
+
+    try {
+        const [result] = await pool.query(
+            `SELECT L_ListingID FROM rets_property WHERE L_ListingID = ?`, req.params.id);
+        if (result.length < 1) {
+            return res.status(404).json({ status: "not found", error: "No listing was found with that ID." });
+        }
+
+        const [openhouses] = await pool.query(`SELECT * FROM rets_openhouse WHERE L_ListingID = ? ORDER BY OH_StartDate, OH_StartTime`, req.params.id);
+        return res.status(200).json({openhouses: openhouses});
+    } catch (err) {
+        return res.status(500).json({ status: "internal server error", error: err });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).json({ status: "bad request", error: "Please include a listing ID." });
+    }
+
+    const parsedId = parseInt(req.params.id);
+
+    if (isNaN(parsedId)) {
+        return res.status(400).json({ status: "bad request", error: "Please ensure listing ID is numeric." });
+    }
+    if (parsedId > 9999999999 || parsedId < 100000000) {
+        return res.status(400).json({ status: "bad request", error: "Please ensure listing ID is between 100000000 and 9999999999." });
+    }
+
+    try {
+        const [result] = await pool.query(
+            `SELECT *
+            FROM rets_property WHERE L_ListingID = ?`, req.params.id);
+        if (result.length < 1) {
+            return res.status(404).json({ status: "not found", error: `No listing was found for ID ${req.params.id}.` });
+        }
+
+        return res.status(200).json({ results: result});
+    } catch (err) {
+        return res.status(500).json({ status: "internal server error", error: err });
+    }
+});
+
 export default router;
