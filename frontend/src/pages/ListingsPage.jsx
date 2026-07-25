@@ -62,7 +62,7 @@ export default function ListingsPage() {
       <div className="p-3 m-3">
         <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">Listing Page</h1>
           <div className="py-3 my-3">
-            Showing {properties?.limit} of {properties?.total} properties
+            Showing {properties?.offset}-{properties?.limit+properties?.offset} of {properties?.total} properties
           </div>
           <div className="grid grid-cols-4 gap-4">
             {properties?.results?.map((property) => (
