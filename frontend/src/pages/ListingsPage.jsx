@@ -1,27 +1,30 @@
 import { useState, useEffect } from "react";
 import api from "../api/client.js";
-// import PropertyCard from '../components/PropertyCard'
+import PropertyCard from '../components/PropertyCard'
 
-function ErrorCard({errMsg}) {
-    return (
-        <>
-        <p>An error occured.</p>
-        <p className="text-red-600">{errMsg}</p>
-        </>
-    )
+function ErrorCard({ errMsg }) {
+  return (
+    <>
+      <p className="text-red-600">{errMsg}</p>
+    </>
+  );
 }
 
 export default function ListingsPage() {
   const [loading, setLoading] = useState(false);
-  const [properties, setProperties] = useState([]);
-  const [singleProperty, setSingleProperty] = useState([]);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState([]);
+  const [properties, setProperties] = useState(null);
 
   useEffect(() => {
     const loadProperties = async () => {
       setLoading(true);
 
-      const response = await api.fetchProperties({ limit: 5, offset: 5 });
-      if (response) {
+      const response = await api.fetchProperties({ limit: 5, offset: 0 });
+      if (response.error) {
+        setError(true);
+        setErrorMsg(response);
+      } else {
         setProperties(response);
       }
 
@@ -31,20 +34,7 @@ export default function ListingsPage() {
     loadProperties();
   }, []);
 
-  useEffect(() => {
-    const loadSingleProperty = async () => {
-      setLoading(true);
 
-      const response = await api.fetchPropertyDetail("1118422731");
-      if (response) {
-        setSingleProperty(response);
-      }
-
-      setLoading(false);
-    };
-
-    loadSingleProperty();
-  }, []);
 
   return (
     <>
@@ -52,14 +42,26 @@ export default function ListingsPage() {
         <h2 className="text-center font-bold align-middle">Loading...</h2>
       ) : (
         <div className="font-bold">
-        {properties.message ? (
-                <ErrorCard errMsg={properties.message}/>
-        ) : (
-            <>
-                <p>{JSON.stringify(properties)}</p>
-                <p>{JSON.stringify(singleProperty)}</p>
-            </>
-        )}
+            {error ? (
+                <>
+                    <p>Status: {errorMsg.status}</p>
+                    <ErrorCard errMsg={errorMsg.error} />
+                </>
+            )  : (
+                <>
+                <div>
+                    Showing {properties.results.length} of {properties.total}
+                </div>
+                <div className="grid grid-cols-4 gap-4">
+                    {properties?.results?.map(property => (
+                        <PropertyCard
+                            key={property.ListingID}
+                            property={property}
+                        />
+                    ))}
+                </div>
+                </>
+            )}
         </div>
       )}
     </>

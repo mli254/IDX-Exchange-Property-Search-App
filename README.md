@@ -100,7 +100,7 @@ Checks the status of the database connection.
 | Condition | Status | Response |
 |-----------|--------|----------|
 | Database Connected | `200` | `{status: "ok", database: "connected"}` |
-| Database Disconnected | `500` | `{status: "internal server error", database: "disconnected", message: [error message] }` |
+| Database Disconnected | `500` | `{status: "internal server error", database: "disconnected", error: [error message] }` |
 
 The responses use the standard HTTP status codes, with `200` corresponding to success or "ok" and `500` corresponding to an internal server error. 
 
@@ -134,9 +134,9 @@ Accepts the following filters:
 | Condition | Status | Response |
 |-----------|--------|----------|
 | Successful Filtering | `200` | `{ "total": [count], "limit": [limit], "offset": [offset], "results": [ ... ] }` |
-| Invalid Parameter Type | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is a numeric whole number."}` |
-| Invalid Parameter Range (Min) | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is greater than [min]"}` |
-| Invalid Parameter Range (Max) | `400` | `{status: "bad request", message: "Please ensure [parameter_name] parameter is less than [max]"}` |
+| Invalid Parameter Type | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is a numeric whole number."}` |
+| Invalid Parameter Range (Min) | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is greater than [min]"}` |
+| Invalid Parameter Range (Max) | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is less than [max]"}` |
 
 The `400` HTTP code refers to a bad request, which indicates an error on the client side. 
 
@@ -152,9 +152,9 @@ An endpoint that, given a property's ID, returns all the data associated with th
 | Condition | Status | Response |
 |-----------|--------|----------|
 | Success | `200` | `{ "results": [...] }`
-| Invalid Parameter Type | `400` | `status: "bad request", message: "Please ensure listing ID is numeric."`
-| Invalid Parameter Range | `400` | `status: "bad request", message: "Please ensure listing ID is between 100000000 and 9999999999."`
-| Unknown Property ID | `404` | `status: "not found", message: "No listing was found for ID [id]."`
+| Invalid Parameter Type | `400` | `status: "bad request", error: "Please ensure listing ID is numeric."`
+| Invalid Parameter Range | `400` | `status: "bad request", error: "Please ensure listing ID is between 100000000 and 9999999999."`
+| Unknown Property ID | `404` | `status: "not found", error: "No listing was found for ID [id]."`
 
 The `404` HTTP code refers to the "not found" error, where a requested resource could not be located by the server. 
 
@@ -170,9 +170,9 @@ An endpoint that returns all the openhouse events for a given property ID. If th
 | Condition | Status | Response |
 |-----------|--------|----------|
 | Success | `200` | `{ "openhouses": [...] }`
-| Invalid Parameter Type | `400` | `status: "bad request", message: "Please ensure listing ID is numeric."`
-| Invalid Parameter Range | `400` | `status: "bad request", message: "Please ensure listing ID is between 100000000 and 9999999999."`
-| Unknown Property ID | `404` | `status: "not found", message: "No listing was found for ID [id]."`
+| Invalid Parameter Type | `400` | `status: "bad request", error: "Please ensure listing ID is numeric."`
+| Invalid Parameter Range | `400` | `status: "bad request", error: "Please ensure listing ID is between 100000000 and 9999999999."`
+| Unknown Property ID | `404` | `status: "not found", error: "No listing was found for ID [id]."`
 
 To access the endpoint:
 

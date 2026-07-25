@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.limit, "limit", 1, 100);
 
         if (param.error) {
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         limit = param.parsedParam;
@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.offset, "offset", 0);
 
         if (param.error) { 
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         offset = param.parsedParam;
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.minPrice, "minPrice", 0);
 
         if (param.error) { 
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         conditions.push("L_SystemPrice >= ?");
@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.maxPrice, "maxPrice", 0);
 
         if (param.error) {
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         conditions.push("L_SystemPrice <= ?");
@@ -90,7 +90,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.beds, "beds", 0);
 
         if (param.error) {
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         conditions.push("L_Keyword2 = ?");
@@ -101,7 +101,7 @@ router.get('/', async (req, res) => {
         const param = paramValidation(req.query.baths, "baths", 0);
 
         if (param.error) {
-            return res.status(400).json({ status: "bad request", message: param.error });
+            return res.status(400).json({ status: "bad request", error: param.error });
         }
 
         conditions.push("LM_Dec_3 = ?");
@@ -120,7 +120,7 @@ router.get('/', async (req, res) => {
         // an ORDER BY L_ListingID command is used to ensure the results are consistent
         // 'AS' keyword allows customization of display names for fields in order to make output more readable 
         const [result] = await pool.query(
-            `SELECT L_ListingID AS ListingID, L_City AS City, L_Zip AS Zipcode, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths
+            `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT 
             FROM rets_property ${wherequery} ORDER BY L_ListingID
             LIMIT ? OFFSET ?;`, [...values, limit, offset]
         );
@@ -137,7 +137,7 @@ router.get('/', async (req, res) => {
         .status(500)
         .json({
             status: "internal server error", 
-            message: error 
+            error: error 
         });
     }    
 });

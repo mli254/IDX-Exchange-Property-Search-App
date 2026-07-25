@@ -31,7 +31,7 @@ app.get('/api/health', async (req, res) => {
       .json({
         status: "internal server error", 
         database: "disconnected", 
-        message: error 
+        error: error 
       });
   }
 });
