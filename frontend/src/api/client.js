@@ -42,19 +42,28 @@ const fetchProperties = async (params) => {
 
         if (response.ok) {
             return await response.json();
-            // console.log(await response.json());
+        } else {
+            return await response.json();
         }
 
     } catch (e) {
         console.log(e);
+        return {message: "failed to reach backend.", error: e};
     }
 }
 
 const fetchPropertyDetail = async (id) => {
     try {
-        console.log(id);
+        const response = await fetch(`/api/properties/${id}`);
+        
+        if (response.ok) {
+            return await response.json();
+        } else {
+            return await response.json();
+        }
     } catch (e) {
         console.log(e);
+        return {message: "failed to reach backend.", error: e};
     }
 }
 
