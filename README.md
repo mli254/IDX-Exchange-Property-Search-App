@@ -60,6 +60,14 @@ Currently, these include:
 - cors
     - provides security for cross-origin requests
 
+### React / Vite Setup
+React is used for the frontend, created via Vite and with `npm` as a package manager as well. If creating the project from scratch, run:
+
+```bash
+npm create vite@latest frontend 
+```
+With `frontend` becoming the folder that holds your React app. From there, the Command Line will present several configuration options. Select `React` and then `JavaScript`.
+
 ### SQL Setup
 To speed up database queries, indexes are created on commonly accessed columns:
 
@@ -92,6 +100,14 @@ npm install
 npm run dev
 ```
 Server should start on `http://localhost:5000`. 
+
+### 3. React.js
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The application should start on `http://localhost:3000`.
 
 ## API
 ### `GET /api/health`
