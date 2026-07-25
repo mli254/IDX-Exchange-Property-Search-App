@@ -10,6 +10,14 @@ function ErrorCard({ errMsg }) {
   );
 }
 
+function LoadingCard() {
+    return (
+        <div>
+            <h2 className="text-center font-bold align-middle">Loading...</h2>
+        </div>
+    )
+}
+
 export default function ListingsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -39,9 +47,9 @@ export default function ListingsPage() {
   return (
     <>
       {loading ? (
-        <h2 className="text-center font-bold align-middle">Loading...</h2>
+            <LoadingCard/>
       ) : (
-        <div className="font-bold">
+        <div className="p-3 m-3">
             {error ? (
                 <>
                     <p>Status: {errorMsg.status}</p>
@@ -49,8 +57,8 @@ export default function ListingsPage() {
                 </>
             )  : (
                 <>
-                <div>
-                    Showing {properties.results.length} of {properties.total}
+                <div className="py-3 my-3">
+                    Showing {properties?.results?.length} of {properties?.total}
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                     {properties?.results?.map(property => (

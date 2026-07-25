@@ -120,7 +120,7 @@ router.get('/', async (req, res) => {
         // an ORDER BY L_ListingID command is used to ensure the results are consistent
         // 'AS' keyword allows customization of display names for fields in order to make output more readable 
         const [result] = await pool.query(
-            `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT 
+            `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT, L_Photos as Photos 
             FROM rets_property ${wherequery} ORDER BY L_ListingID
             LIMIT ? OFFSET ?;`, [...values, limit, offset]
         );
