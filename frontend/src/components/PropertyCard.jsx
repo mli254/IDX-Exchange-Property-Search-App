@@ -1,30 +1,64 @@
-function parsePhotos(photosJSON) {
-    try {
-        const photos = JSON.parse(photosJSON);
-
-        return photos[0];
-    } catch {
-        console.log("something went wrong.");
-        return null;
+function parseFirstPhoto(photosJSON) {
+  if (!photosJSON) {
+    return null;
+  }
+  try {
+    const photos = JSON.parse(photosJSON);
+    if (!Array.isArray(photos) || photos.length === 0) {
+      return null;
     }
+    return photos[0];
+  } catch {
+    console.log("JSON not able to parse the photo JSON string.");
+    return null;
+  }
+}
+
+function formatPrice(price, locale = "en-US", currency = "USD") {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(price);
 }
 
 export default function PropertyCard({ property }) {
-    const photoURL = parsePhotos(property.Photos);
-    // "https://media.istockphoto.com/vectors/avatar-photo-placeholder-icon-design-vector-id1221380217?k=20&m=1221380217&s=612x612&w=0&h=avdFJ5PNo-CSkbUZzQ0Xm8h3u5BovGfSNDrfRicPDfY="
+  const photoURL = parseFirstPhoto(property.Photos);
   return (
     <>
-      <div className="box border-black border-2 shadow-md">
-        <h1 className="p-2">Property Card</h1>
-        <img src={photoURL} />
+      <div className="box border-blue-900 border-1 shadow-lg shadow-gray-400 hover:shadow-lg hover:shadow-blue-900">
+        <h1 className="p-2 font-bold text-lg">
+          {property.Address || "Address: N/A"}
+        </h1>
+        {photoURL ? (
+          <img src={photoURL} />
+        ) : (
+          <div className="bg-gray-300 min-h-[12rem] text-center pt-3">
+            No photo available.
+          </div>
+        )}
+
         <div className="flex flex-col p-2 m-2">
-            <p><strong>Price:</strong> {property.Price}</p>
-            <p><strong>Address:</strong> {property.Address}</p>
-            <p><strong>City:</strong> {property.City}</p>
-            <p><strong>State:</strong> {property.State}</p>
-            <p><strong>Beds:</strong> {property.Beds}</p>
-            <p><strong>Baths:</strong> {property.Baths}</p>
-            <p><strong>Sqft:</strong> {property.SQFT}</p>
+          <p>
+            <strong>Price:</strong> {formatPrice(property.Price) || "—"}
+          </p>
+          <p>
+            <strong>Address:</strong> {property.Address || "—"}
+          </p>
+          <p>
+            <strong>Location:</strong>
+            {property.City && property.State
+              ? ` ${property.City}, ${property.State}`
+              : " —"}
+          </p>
+          <p>
+            <strong>Beds:</strong> {Math.floor(property.Beds) || "—"}
+          </p>
+          <p>
+            <strong>Baths:</strong> {Math.floor(property.Baths) || "—"}
+          </p>
+          <p>
+            <strong>Square Feet:</strong> {property.SQFT.toLocaleString() || "—"}
+          </p>
         </div>
       </div>
     </>

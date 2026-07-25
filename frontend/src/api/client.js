@@ -51,7 +51,11 @@ const fetchProperties = async (params) => {
     }
   } catch (e) {
     console.log(e);
-    return { status: "internal server error", error: "Failed to reach backend.", message: e };
+    return {
+      status: "internal server error",
+      error: "Failed to reach backend.",
+      message: e,
+    };
   }
 };
 
@@ -67,8 +71,11 @@ const fetchPropertyDetail = async (id) => {
       return errResponse;
     }
   } catch (e) {
-    console.log(e);
-    return { status: "internal server error", error: "Failed to reach backend.", message: e };
+    return {
+      status: "internal server error",
+      error: "Failed to reach backend.",
+      message: e,
+    };
   }
 };
 

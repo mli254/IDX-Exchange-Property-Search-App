@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react";
-import api from "../api/client.js";
-import PropertyCard from '../components/PropertyCard'
+import api from "../api/client";
+import PropertyCard from "../components/PropertyCard";
 
-function ErrorCard({ errMsg }) {
+function ErrorCard({ error }) {
   return (
-    <>
-      <p className="text-red-600">{errMsg}</p>
-    </>
+    <div className="w-96 m-auto mt-[5rem] p-2 text-red-600 text-center box border-red-400 border-2">
+      <p className="text-3xl font-bold">Status: {error.status}</p>
+      <p>{error.error}</p>
+    </div>
   );
 }
 
 function LoadingCard() {
-    return (
-        <div>
-            <h2 className="text-center font-bold align-middle">Loading...</h2>
-        </div>
-    )
+  return (
+    <div>
+      <h2 className="text-center text-4xl pt-[15rem] font-bold align-middle">Loading...</h2>
+    </div>
+  );
 }
 
 export default function ListingsPage() {
@@ -24,11 +25,17 @@ export default function ListingsPage() {
   const [errorMsg, setErrorMsg] = useState([]);
   const [properties, setProperties] = useState(null);
 
+  const LIMIT = 20;
+  const OFFSET = 0;
+
   useEffect(() => {
     const loadProperties = async () => {
       setLoading(true);
 
-      const response = await api.fetchProperties({ limit: 5, offset: 0 });
+      const response = await api.fetchProperties({
+        limit: LIMIT,
+        offset: OFFSET,
+      });
       if (response.error) {
         setError(true);
         setErrorMsg(response);
@@ -42,36 +49,27 @@ export default function ListingsPage() {
     loadProperties();
   }, []);
 
+  if (loading) {
+    return <LoadingCard />;
+  }
 
+  if (error) {
+    return <ErrorCard error={errorMsg} />;
+  }
 
   return (
     <>
-      {loading ? (
-            <LoadingCard/>
-      ) : (
-        <div className="p-3 m-3">
-            {error ? (
-                <>
-                    <p>Status: {errorMsg.status}</p>
-                    <ErrorCard errMsg={errorMsg.error} />
-                </>
-            )  : (
-                <>
-                <div className="py-3 my-3">
-                    Showing {properties?.results?.length} of {properties?.total}
-                </div>
-                <div className="grid grid-cols-4 gap-4">
-                    {properties?.results?.map(property => (
-                        <PropertyCard
-                            key={property.ListingID}
-                            property={property}
-                        />
-                    ))}
-                </div>
-                </>
-            )}
-        </div>
-      )}
+      <div className="p-3 m-3">
+        <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">Listing Page</h1>
+          <div className="py-3 my-3">
+            Showing {properties?.limit} of {properties?.total} properties
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            {properties?.results?.map((property) => (
+              <PropertyCard key={property.ListingID} property={property} />
+            ))}
+          </div>
+      </div>
     </>
   );
 }
