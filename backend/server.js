@@ -31,7 +31,8 @@ app.get('/api/health', async (req, res) => {
       .json({
         status: "internal server error", 
         database: "disconnected", 
-        error: error 
+        error: "Unable to connect to database.", 
+        message: error
       });
   }
 });

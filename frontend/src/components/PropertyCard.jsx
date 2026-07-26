@@ -30,7 +30,7 @@ export default function PropertyCard({ property }) {
           {property.Address || "Address: N/A"}
         </h1>
         {photoURL ? (
-          <img src={photoURL} />
+          <img src={photoURL} loading="lazy" />
         ) : (
           <div className="bg-gray-300 min-h-[12rem] text-center pt-3">
             No photo available.

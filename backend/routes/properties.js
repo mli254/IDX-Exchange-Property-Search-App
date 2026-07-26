@@ -137,7 +137,8 @@ router.get('/', async (req, res) => {
         .status(500)
         .json({
             status: "internal server error", 
-            error: error 
+            error: "Unable to connect to database.", 
+            message: error
         });
     }    
 });
@@ -173,8 +174,14 @@ router.get('/:id/openhouses', async (req, res) => {
 
         const [openhouses] = await pool.query(`SELECT * FROM rets_openhouse WHERE L_ListingID = ? ORDER BY OpenHouseDate, OH_StartTime`, req.params.id);
         return res.status(200).json({openhouses: openhouses});
-    } catch (err) {
-        return res.status(500).json({ status: "internal server error", error: err });
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ 
+                status: "internal server error", 
+                error: "Unable to connect to database.", 
+                message: error
+            });
     }
 });
 
@@ -201,8 +208,14 @@ router.get('/:id', async (req, res) => {
         }
 
         return res.status(200).json({ results: result});
-    } catch (err) {
-        return res.status(500).json({ status: "internal server error", error: err });
+    } catch (error) {
+        return res
+        .status(500)
+        .json({ 
+                status: "internal server error", 
+                error: "Unable to connect to database.", 
+                message: error
+            });
     }
 });
 
