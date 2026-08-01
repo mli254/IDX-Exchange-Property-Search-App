@@ -29,95 +29,95 @@ export default function PropertyFilters({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <fieldset className="m-1 p-2 border-1 border-gray-300">
+        <fieldset className="w-[90%] md:w-[70%] m-1 p-2 border-1 border-gray-300">
           <legend className="m-1 p-1 font-bold">
             Please enter filter values here:
           </legend>
-          <div className="flex flex-wrap">
-              <div>
-                  <label htmlFor="city-filter" className="font-bold mx-3">
-                    City:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="city-filter"
-                    name="city"
-                    placeholder="Enter city name..."
-                    value={tempFilter.city}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
-              <div>
-                  <label htmlFor="zip-filter" className="font-bold mx-3">
-                    Zipcode:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="zip-filter"
-                    name="zipcode"
-                    placeholder="Enter zipcode..."
-                    value={tempFilter.zipcode}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
-              <div>
-                  <label htmlFor="minPrice-filter" className="font-bold mx-3">
-                    Minimum Price:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="minPrice-filter"
-                    name="minPrice"
-                    placeholder="Enter the minimum price..."
-                    value={tempFilter.minPrice}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
-              <div>
-                  <label htmlFor="maxPrice-filter" className="font-bold mx-3">
-                    Maximum Price:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="maxPrice-filter"
-                    name="maxPrice"
-                    placeholder="Enter the maximum price..."
-                    value={tempFilter.maxPrice}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
-              <div>
-                  <label htmlFor="beds-filter" className="font-bold mx-3">
-                    Number of Beds:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="beds-filter"
-                    name="beds"
-                    placeholder="Enter the number of beds..."
-                    value={tempFilter.beds}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
-              <div>
-                  <label htmlFor="baths-filter" className="font-bold mx-3">
-                    Number of Baths:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    id="baths-filter"
-                    name="baths"
-                    placeholder="Enter the number of baths..."
-                    value={tempFilter.baths}
-                    onChange={handleChange}
-                    className="border-1 border-gray-200 p-1 m-1"
-                  />
-              </div>
+          <div className="grid grid-cols-2">
+            <div>
+              <label htmlFor="city-filter" className="font-bold mx-3">
+                City:{" "}
+              </label>
+              <input
+                type="text"
+                id="city-filter"
+                name="city"
+                placeholder="Enter city name..."
+                value={tempFilter.city}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
+            <div>
+              <label htmlFor="zip-filter" className="font-bold mx-3">
+                Zipcode:{" "}
+              </label>
+              <input
+                type="text"
+                id="zip-filter"
+                name="zipcode"
+                placeholder="Enter zipcode..."
+                value={tempFilter.zipcode}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
+            <div>
+              <label htmlFor="minPrice-filter" className="font-bold mx-3">
+                Minimum Price:{" "}
+              </label>
+              <input
+                type="text"
+                id="minPrice-filter"
+                name="minPrice"
+                placeholder="Enter the minimum price..."
+                value={tempFilter.minPrice}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
+            <div>
+              <label htmlFor="maxPrice-filter" className="font-bold mx-3">
+                Maximum Price:{" "}
+              </label>
+              <input
+                type="text"
+                id="maxPrice-filter"
+                name="maxPrice"
+                placeholder="Enter the maximum price..."
+                value={tempFilter.maxPrice}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
+            <div>
+              <label htmlFor="beds-filter" className="font-bold mx-3">
+                Number of Beds:{" "}
+              </label>
+              <input
+                type="text"
+                id="beds-filter"
+                name="beds"
+                placeholder="Enter the number of beds..."
+                value={tempFilter.beds}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
+            <div>
+              <label htmlFor="baths-filter" className="font-bold mx-3">
+                Number of Baths:{" "}
+              </label>
+              <input
+                type="text"
+                id="baths-filter"
+                name="baths"
+                placeholder="Enter the number of baths..."
+                value={tempFilter.baths}
+                onChange={handleChange}
+                className="border-1 border-gray-200 p-1 m-1"
+              />
+            </div>
           </div>
           <div className="block mx-3 mt-1">
             <button

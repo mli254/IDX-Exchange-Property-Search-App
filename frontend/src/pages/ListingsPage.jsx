@@ -75,6 +75,7 @@ export default function ListingsPage() {
         setErrorMsg(response);
       } else {
         setProperties(response);
+        setError(false);
       }
 
       setLoading(false);
@@ -104,8 +105,10 @@ export default function ListingsPage() {
           <>
             <div className="py-3 my-3">
               Showing {properties?.offset}-
-              {properties?.limit < properties?.total ? (properties?.limit + properties?.offset) : properties?.total} of {properties?.total}{" "}
-              properties
+              {properties?.limit < properties?.total
+                ? properties?.limit + properties?.offset
+                : properties?.total}{" "}
+              of {properties?.total} properties
             </div>
             <div className="grid grid-cols-4 gap-4">
               {properties?.results?.map((property) => (
