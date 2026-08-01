@@ -25,7 +25,7 @@ export default function PropertyCard({ property }) {
   const photoURL = parseFirstPhoto(property.Photos);
   return (
     <>
-      <div className="box border-blue-900 border-1 shadow-lg shadow-gray-400 hover:shadow-lg hover:shadow-blue-900">
+      <div className="box border-gray-200 border-1 rounded-lg shadow-lg shadow-gray-400 hover:shadow-lg hover:shadow-blue-900">
         <h1 className="p-2 font-bold text-lg">
           {property.Address || "Address: N/A"}
         </h1>

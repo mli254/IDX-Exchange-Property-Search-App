@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
 import PropertyCard from "../components/PropertyCard";
+import PropertyFilters from "../components/PropertyFilters";
 
 function ErrorCard({ error }) {
   return (
@@ -61,6 +62,9 @@ export default function ListingsPage() {
     <>
       <div className="p-3 m-3">
         <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">Listing Page</h1>
+          <div>
+            <PropertyFilters />
+          </div>
           <div className="py-3 my-3">
             Showing {properties?.offset}-{properties?.limit+properties?.offset} of {properties?.total} properties
           </div>
