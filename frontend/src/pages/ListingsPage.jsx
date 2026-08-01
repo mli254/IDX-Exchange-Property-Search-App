@@ -45,10 +45,10 @@ export default function ListingsPage() {
   const DEFAULT_PARAMS = {
     city: "",
     zipcode: "",
-    minprice: 0,
-    maxPrice: 0,
-    beds: 0,
-    baths: 0,
+    minPrice: "",
+    maxPrice: "",
+    beds: "",
+    baths: "",
   };
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
@@ -104,7 +104,7 @@ export default function ListingsPage() {
           <>
             <div className="py-3 my-3">
               Showing {properties?.offset}-
-              {properties?.limit + properties?.offset} of {properties?.total}{" "}
+              {properties?.limit < properties?.total ? (properties?.limit + properties?.offset) : properties?.total} of {properties?.total}{" "}
               properties
             </div>
             <div className="grid grid-cols-4 gap-4">
