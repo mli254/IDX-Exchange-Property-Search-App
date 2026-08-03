@@ -10,28 +10,28 @@ const fetchProperties = async (params) => {
     */
   const queries = [];
 
-  if (params.limit) {
+  if (params && params.limit) {
     queries.push(`limit=${params.limit}`);
   }
-  if (params.offset) {
+  if (params && params.offset) {
     queries.push(`offset=${params.offset}`);
   }
-  if (params.city) {
+  if (params && params.city) {
     queries.push(`city=${params.city}`);
   }
-  if (params.zipcode) {
+  if (params && params.zipcode) {
     queries.push(`zipcode=${params.zipcode}`);
   }
-  if (params.minPrice) {
+  if (params && params.minPrice) {
     queries.push(`minPrice=${params.minPrice}`);
   }
-  if (params.maxPrice) {
+  if (params && params.maxPrice) {
     queries.push(`maxPrice=${params.maxPrice}`);
   }
-  if (params.beds) {
+  if (params && params.beds) {
     queries.push(`beds=${params.beds}`);
   }
-  if (params.baths) {
+  if (params && params.baths) {
     queries.push(`baths=${params.baths}`);
   }
 
