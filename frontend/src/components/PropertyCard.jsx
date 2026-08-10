@@ -1,3 +1,6 @@
+import { useState } from "react";
+import placeholderImage from "../assets/placeholder.png";
+
 function parseFirstPhoto(photosJSON) {
   if (!photosJSON) {
     return null;
@@ -15,28 +18,42 @@ function parseFirstPhoto(photosJSON) {
 }
 
 function formatPrice(price, locale = "en-US", currency = "USD") {
+  if (!price) {
+    return null;
+  }
+
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency,
   }).format(price);
 }
 
+function formatSQFT(sqft) {
+  if (!sqft) {
+    return null;
+  }
+
+  return sqft.toLocaleString();
+}
+
 export default function PropertyCard({ property }) {
-  const photoURL = parseFirstPhoto(property.Photos);
+  const [photoURL, setPhotoURL] = useState(parseFirstPhoto(property.Photos));
+
+  if (!photoURL) {
+    setPhotoURL(placeholderImage);
+  }
+
+  const handlePhotoError = () => {
+    setPhotoURL(placeholderImage);
+  };
+
   return (
     <>
       <div className="box border-gray-200 border-1 rounded-lg shadow-lg shadow-gray-400 hover:shadow-lg hover:shadow-blue-900">
         <h1 className="p-2 font-bold text-lg">
           {property.Address || "Address: N/A"}
         </h1>
-        {photoURL ? (
-          <img src={photoURL} loading="lazy" />
-        ) : (
-          <div className="bg-gray-300 min-h-[12rem] text-center pt-3">
-            No photo available.
-          </div>
-        )}
-
+        <img src={photoURL} onError={handlePhotoError} loading="lazy" />
         <div className="flex flex-col p-2 m-2">
           <p>
             <strong>Price:</strong> {formatPrice(property.Price) || "—"}
@@ -57,7 +74,8 @@ export default function PropertyCard({ property }) {
             <strong>Baths:</strong> {Math.floor(property.Baths) || "—"}
           </p>
           <p>
-            <strong>Square Feet:</strong> {property.SQFT.toLocaleString() || "—"}
+            <strong>Square Feet:</strong>{" "}
+            {formatSQFT(property.SQFT) || "—"}
           </p>
         </div>
       </div>

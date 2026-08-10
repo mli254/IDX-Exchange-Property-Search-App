@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/client";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
+import Pagination from "../components/Pagination";
 
 function cleanParams(filter) {
   for (let [key, value] of Object.entries(filter)) {
@@ -52,13 +53,26 @@ export default function ListingsPage() {
   };
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(LIMIT);
+  const [offsetPerPage, setOffsetPerPage] = useState(OFFSET);
 
   function updateFilter(tempFilter) {
     setFilter(tempFilter);
+    setOffsetPerPage(OFFSET);
+    setCurrentPage(1);
   }
 
   function clearFilter() {
     setFilter(DEFAULT_PARAMS);
+    setOffsetPerPage(OFFSET);
+    setCurrentPage(1);
+  }
+
+  function changePage(pageNumber) {
+    setCurrentPage(pageNumber);
+    setOffsetPerPage((pageNumber-1)*LIMIT);
+    window.scrollTo(0, 0);
   }
 
   useEffect(() => {
@@ -67,7 +81,7 @@ export default function ListingsPage() {
 
       const response = await api.fetchProperties({
         limit: LIMIT,
-        offset: OFFSET,
+        offset: offsetPerPage,
         ...cleanParams(filter),
       });
       if (response.error) {
@@ -82,7 +96,7 @@ export default function ListingsPage() {
     };
 
     loadProperties();
-  }, [filter]);
+  }, [filter, offsetPerPage]);
 
   return (
     <>
@@ -105,11 +119,18 @@ export default function ListingsPage() {
           <>
             <div className="py-3 my-3">
               Showing {properties?.offset}-
-              {properties?.limit < properties?.total
+              {properties?.limit + properties?.offset < properties?.total
                 ? properties?.limit + properties?.offset
                 : properties?.total}{" "}
               of {properties?.total} properties
             </div>
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={properties?.total}
+              changePage={changePage}
+            />
+
             <div className="grid grid-cols-4 gap-4">
               {properties?.results?.map((property) => (
                 <PropertyCard key={property.ListingID} property={property} />
