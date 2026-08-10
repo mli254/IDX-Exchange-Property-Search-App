@@ -71,7 +71,7 @@ export default function ListingsPage() {
 
   function changePage(pageNumber) {
     setCurrentPage(pageNumber);
-    setOffsetPerPage((pageNumber-1)*LIMIT);
+    setOffsetPerPage((pageNumber - 1) * LIMIT);
     window.scrollTo(0, 0);
   }
 
@@ -104,12 +104,12 @@ export default function ListingsPage() {
         <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">
           Listing Page
         </h1>
-          <PropertyFilters
-            filterValues={filter}
-            defaultParams={DEFAULT_PARAMS}
-            updateFilter={updateFilter}
-            clearFilter={clearFilter}
-          />
+        <PropertyFilters
+          filterValues={filter}
+          defaultParams={DEFAULT_PARAMS}
+          updateFilter={updateFilter}
+          clearFilter={clearFilter}
+        />
         {loading && <LoadingCard />}
         {error && <ErrorCard error={errorMsg} />}
         {!loading && !error && properties?.results?.length > 0 && (
@@ -122,7 +122,7 @@ export default function ListingsPage() {
               of {properties?.total} properties
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {properties?.results?.map((property) => (
                 <PropertyCard key={property.ListingID} property={property} />
               ))}
@@ -135,14 +135,14 @@ export default function ListingsPage() {
             No properties found. Please adjust filter terms and try again.
           </div>
         )}
-      <Pagination
-              currentPage={currentPage}
-              itemsPerPage={itemsPerPage}
-              totalItems={properties?.total}
-              changePage={changePage}
-              loading={loading}
-      />
-      </div>      
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={properties?.total}
+          changePage={changePage}
+          loading={loading}
+        />
+      </div>
     </>
   );
 }
