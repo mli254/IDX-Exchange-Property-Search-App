@@ -33,34 +33,38 @@ function generatePageNumbers(currentPage, totalPages, itemsPerPage) {
     return pageNumbers;
 }
 
-export default function Pagination({currentPage, itemsPerPage, totalItems, changePage}) {
+export default function Pagination({currentPage, itemsPerPage, totalItems, changePage, loading}) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return (
     <>
-    <nav className="border p-5">
+    <nav className="flex justify-center items-center gap-2 border border-gray-300 rounded-md p-3 mt-5">
         <button
-        className="font-bold border rounded-lg px-2 disabled:text-gray-300"
+        className="font-bold text-white bg-blue-900 rounded-lg px-2 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
         onClick={() => changePage(currentPage - 1)}
-        disabled={currentPage===1}>
+        disabled={currentPage===1 || loading}>
             Previous
         </button>
 
         {generatePageNumbers(currentPage, totalPages).map((pageNumber, index) => (
             <button
-            className="font-bold border rounded-lg px-2 disabled:text-gray-300"
+            className={`font-bold rounded-lg px-2 ${
+                pageNumber === "..." ? 'text-gray-300 cursor-default'
+                : pageNumber === currentPage ? 'bg-blue-900 text-white' 
+                : loading ? 'text-gray-300 cursor-not-allowed' : 'hover:text-sky-700'
+            }`}
             key={index}
             onClick={() => changePage(pageNumber)}
-            disabled={pageNumber==="..."}
+            disabled={pageNumber==="..." || loading}
             >
                 {pageNumber}
             </button>
         ))}
 
         <button
-        className="font-bold border rounded-lg px-2 disabled:text-gray-300"
+        className="font-bold text-white bg-blue-900 rounded-lg px-2 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
         onClick={() => changePage(currentPage + 1)}
-        disabled={currentPage===totalPages}
+        disabled={currentPage===totalPages || loading}
         >
             Next
         </button>

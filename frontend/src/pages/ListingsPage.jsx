@@ -18,7 +18,7 @@ function cleanParams(filter) {
 
 function ErrorCard({ error }) {
   return (
-    <div className="w-96 m-auto mt-[5rem] p-2 text-red-600 text-center box border-red-400 border-2">
+    <div className="w-96 m-auto my-[5rem] p-2 text-red-600 text-center box border-red-400 border-2">
       <p className="text-3xl font-bold capitalize">Status: {error.status}</p>
       <p>{error.error}</p>
     </div>
@@ -28,7 +28,7 @@ function ErrorCard({ error }) {
 function LoadingCard() {
   return (
     <div>
-      <h2 className="text-center text-4xl pt-[15rem] font-bold align-middle">
+      <h2 className="text-center text-4xl py-[15rem] font-bold align-middle">
         Loading...
       </h2>
     </div>
@@ -104,17 +104,14 @@ export default function ListingsPage() {
         <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">
           Listing Page
         </h1>
-        <div>
           <PropertyFilters
             filterValues={filter}
             defaultParams={DEFAULT_PARAMS}
             updateFilter={updateFilter}
             clearFilter={clearFilter}
           />
-        </div>
         {loading && <LoadingCard />}
         {error && <ErrorCard error={errorMsg} />}
-
         {!loading && !error && properties?.results?.length > 0 && (
           <>
             <div className="py-3 my-3">
@@ -124,12 +121,6 @@ export default function ListingsPage() {
                 : properties?.total}{" "}
               of {properties?.total} properties
             </div>
-            <Pagination
-              currentPage={currentPage}
-              itemsPerPage={itemsPerPage}
-              totalItems={properties?.total}
-              changePage={changePage}
-            />
 
             <div className="grid grid-cols-4 gap-4">
               {properties?.results?.map((property) => (
@@ -144,7 +135,14 @@ export default function ListingsPage() {
             No properties found. Please adjust filter terms and try again.
           </div>
         )}
-      </div>
+      <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={properties?.total}
+              changePage={changePage}
+              loading={loading}
+      />
+      </div>      
     </>
   );
 }

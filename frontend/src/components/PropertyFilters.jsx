@@ -29,7 +29,7 @@ export default function PropertyFilters({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <fieldset className="w-[90%] md:w-[70%] m-1 p-2 border-1 border-gray-300">
+        <fieldset className="w-[90%] md:w-[70%] m-1 p-2 border-1 border-gray-300 rounded-md">
           <legend className="m-1 p-1 font-bold">
             Please enter filter values here:
           </legend>
@@ -119,16 +119,17 @@ export default function PropertyFilters({
               />
             </div>
           </div>
-          <div className="block mx-3 mt-1">
+          <div className="block mx-3 mt-4 mb-2">
             <button
               type="submit"
-              className="transition duration-200 mx-2 px-2 pb-1 border-1 border-gray-300 rounded-lg hover:bg-gray-300"
+              className="transition duration-200 mx-2 px-3 py-1 font-bold text-white bg-blue-900 rounded-lg hover:bg-sky-700"
+              // "font-bold text-white bg-blue-900 rounded-lg px-2 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
             >
               Submit
             </button>
             <button
               type="button"
-              className="transition duration-200 mx-2 px-2 pb-1 border-1 border-gray-300 rounded-lg hover:bg-gray-300"
+              className="transition duration-200 mx-2 px-3 py-1 font-bold text-white bg-blue-900 rounded-lg hover:bg-sky-700"
               onClick={handleClear}
             >
               Clear
