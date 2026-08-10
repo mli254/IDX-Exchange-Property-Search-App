@@ -48,7 +48,7 @@ export default function Pagination({
         <button
           className="font-bold text-white bg-blue-900 rounded-lg px-2 mx-1 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
           onClick={() => changePage(currentPage - 1)}
-          disabled={currentPage === 1 || loading}
+          disabled={currentPage === 1 || loading || totalItems === 0}
         >
           Previous
         </button>
@@ -77,7 +77,7 @@ export default function Pagination({
         <button
           className="font-bold text-white bg-blue-900 rounded-lg px-2 mx-1 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
           onClick={() => changePage(currentPage + 1)}
-          disabled={currentPage === totalPages || loading}
+          disabled={currentPage === totalPages || loading || totalItems === 0}
         >
           Next
         </button>
