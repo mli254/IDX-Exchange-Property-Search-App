@@ -45,7 +45,7 @@ export default function PropertyFilters({
                 placeholder="Enter city name..."
                 value={tempFilter.city}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
             <div>
@@ -59,7 +59,7 @@ export default function PropertyFilters({
                 placeholder="Enter zipcode..."
                 value={tempFilter.zipcode}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
             <div>
@@ -73,7 +73,7 @@ export default function PropertyFilters({
                 placeholder="Enter the minimum price..."
                 value={tempFilter.minPrice}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
             <div>
@@ -87,7 +87,7 @@ export default function PropertyFilters({
                 placeholder="Enter the maximum price..."
                 value={tempFilter.maxPrice}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
             <div>
@@ -101,7 +101,7 @@ export default function PropertyFilters({
                 placeholder="Enter the number of beds..."
                 value={tempFilter.beds}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
             <div>
@@ -115,7 +115,7 @@ export default function PropertyFilters({
                 placeholder="Enter the number of baths..."
                 value={tempFilter.baths}
                 onChange={handleChange}
-                className="border-1 border-gray-200 p-1 m-1"
+                className="border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
           </div>

@@ -115,7 +115,7 @@ export default function ListingsPage() {
         {!loading && !error && properties?.results?.length > 0 && (
           <>
             <div className="py-3 my-3">
-              Showing {properties?.offset}-
+              Showing {properties?.offset + 1}-
               {properties?.limit + properties?.offset < properties?.total
                 ? properties?.limit + properties?.offset
                 : properties?.total}{" "}
