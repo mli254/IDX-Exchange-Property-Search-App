@@ -44,7 +44,9 @@ export default function Pagination({
 
   return (
     <>
-      <nav className="flex justify-center items-center gap-2 border border-gray-300 rounded-md p-3 mt-5">
+      <nav
+        className={`${totalPages === 1 ? "hidden" : "flex justify-center items-center gap-2 border border-gray-300 rounded-md p-3 mt-5"}`}
+      >
         <button
           className="font-bold text-white bg-blue-900 rounded-lg px-2 mx-1 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
           onClick={() => changePage(currentPage - 1)}
