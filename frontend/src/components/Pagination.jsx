@@ -1,5 +1,5 @@
-function generatePageNumbers(currentPage, totalPages, itemsPerPage) {
-  const MAX_VISIBLE_PAGES = itemsPerPage;
+function generatePageNumbers(currentPage, totalPages) {
+  const MAX_VISIBLE_PAGES = 7;
   const pageNumbers = [];
 
   // show all pages if less than the number allowed to be visible at once
@@ -45,6 +45,7 @@ export default function Pagination({
   return (
     <>
       <nav
+        role="navigation"
         className={`${totalPages === 1 ? "hidden" : "flex justify-center items-center gap-2 border border-gray-300 rounded-md p-3 mt-5"}`}
       >
         <button
