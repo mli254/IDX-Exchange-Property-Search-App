@@ -79,32 +79,30 @@ const fetchPropertyDetail = async (id) => {
   }
 };
 
-/*
-    Sample Usage: 
-    -----------------
-    useEffect(() => {
-        const loadSingleProperty = async () => {
-        setLoading(true);
+const fetchPropertyOpenhouses = async (id) => {
+  try {
+    const response = await fetch(`/api/properties/${id}/openhouses`);
 
-        const response = await api.fetchPropertyDetail("1118422731");
-        if (response.error) {
-            setError(true);
-            setErrorMsg(response);
-        } else {
-            setSingleProperty(response);
-        }
-
-        setLoading(false);
-        };
-
-        loadSingleProperty();
-    }, []);
-
-*/
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errResponse = await response.json();
+      console.log(errResponse);
+      return errResponse;
+    }
+  } catch (e) {
+    return {
+      status: "internal server error",
+      error: "Failed to reach backend.",
+      message: e,
+    };
+  }
+};
 
 const api = {
   fetchProperties: fetchProperties,
   fetchPropertyDetail: fetchPropertyDetail,
+  fetchPropertyOpenhouses: fetchPropertyOpenhouses,
 };
 
 export default api;

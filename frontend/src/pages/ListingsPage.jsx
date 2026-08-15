@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import LoadingCard from "../components/LoadingCard";
+import ErrorCard from "../components/ErrorCard";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
 import Pagination from "../components/Pagination";
@@ -14,25 +16,6 @@ function cleanParams(filter) {
     }
   }
   return filter;
-}
-
-function ErrorCard({ error }) {
-  return (
-    <div className="w-96 m-auto my-[5rem] p-2 text-red-600 text-center box border-red-400 border-2">
-      <p className="text-3xl font-bold capitalize">Status: {error.status}</p>
-      <p>{error.error}</p>
-    </div>
-  );
-}
-
-function LoadingCard() {
-  return (
-    <div>
-      <h2 className="text-center text-4xl py-[5rem] font-bold align-middle">
-        Loading...
-      </h2>
-    </div>
-  );
 }
 
 export default function ListingsPage() {
@@ -54,7 +37,7 @@ export default function ListingsPage() {
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(LIMIT);
+  // const [itemsPerPage, setItemsPerPage] = useState(LIMIT);
   const [offsetPerPage, setOffsetPerPage] = useState(OFFSET);
 
   function updateFilter(tempFilter) {
@@ -137,7 +120,7 @@ export default function ListingsPage() {
         )}
         <Pagination
           currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
+          itemsPerPage={LIMIT}
           totalItems={properties?.total}
           changePage={changePage}
           loading={loading}
