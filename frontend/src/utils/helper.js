@@ -1,3 +1,5 @@
+import { parseISO } from "date-fns";
+
 function parseFirstPhoto(photosJSON) {
   if (!photosJSON) {
     return null;
@@ -55,4 +57,53 @@ function formatLocation(city, state, zip) {
   }
 }
 
-export { parseFirstPhoto, formatPrice, formatSQFT, formatLocation };
+function formatDate(dateLiteral) {
+  const date = parseISO(dateLiteral);
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString(undefined, options);
+}
+
+function formatTime(timeLiteral) {
+  let hours = parseInt(timeLiteral.slice(0, 2));
+  if (isNaN(hours)) {
+    return null;
+  }
+  const minutes = timeLiteral.slice(2, 5);
+
+  let time = "";
+
+  if (hours === 0) {
+    time += `12`;
+    time += `${minutes}`;
+    time += " AM";
+  } else if (hours < 12) {
+    time += `${hours}`;
+    time += `${minutes}`;
+    time += " AM";
+  } else if (hours === 12) {
+    time += `12`;
+    time += `${minutes}`;
+    time += " PM";
+  } else {
+    hours = hours % 12;
+    time += `${hours}`;
+    time += `${minutes}`;
+    time += " PM";
+  }
+
+  return time;
+}
+
+export {
+  parseFirstPhoto,
+  formatPrice,
+  formatSQFT,
+  formatLocation,
+  formatDate,
+  formatTime,
+};
