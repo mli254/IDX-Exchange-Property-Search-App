@@ -5,6 +5,7 @@ import LoadingCard from "../components/LoadingCard";
 import ErrorCard from "../components/ErrorCard";
 import OpenHouseDetail from "../components/OpenHouseDetail";
 import * as helper from "../utils/helper";
+import PropertyImageGallery from "../components/PropertyImageGallery";
 
 
 export default function PropertyDetailPage() {
@@ -14,6 +15,7 @@ export default function PropertyDetailPage() {
   const [errorMsg, setErrorMsg] = useState([]);
   const [propertyDetail, setPropertyDetail] = useState([]);
   const [propertyOpenhouses, setPropertyOpenhouses] = useState([]);
+  // const [propertyPhotos, setPropertyPhotos] = useState([]);
 
   useEffect(() => {
     const loadPropertyDetail = async () => {
@@ -63,7 +65,7 @@ export default function PropertyDetailPage() {
       {error && <ErrorCard error={errorMsg} />}
       {!loading && !error && propertyDetail?.results && (
         <div className="flex flex-col">
-          <p className="w-[100%] h-80 bg-gray-200">Images Here</p>
+          <PropertyImageGallery imageArray={helper.parsePhotos(propertyDetail?.results[0].L_Photos)}/>
           <div className="box w-200 m-auto mt-10 mb-5 px-5 py-3 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
             <h2 className="font-[700] text-4xl">
               {helper.formatPrice(propertyDetail.results[0].L_SystemPrice) ||

@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 
 export default function NotFound() {
     return (
-        <div className='w-[100%] h-100 flex flex-col items-center justify-center'>
+        <div className='w-full h-100 flex flex-col items-center justify-center'>
             <h1 className='text-center font-bold text-4xl border-b-3 border-blue-900 pb-1 m-2'>
                 Page Not Found
             </h1>

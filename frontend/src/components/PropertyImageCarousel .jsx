@@ -34,7 +34,7 @@ export default function PropertyImageCarousel({ imageArray }) {
   return (
     <div className="relative">
       <img
-        className="rounded-t-lg min-w-[100%] h-48 object-cover"
+        className="rounded-t-lg min-w-full h-48 object-cover"
         key={currentIndex}
         src={imageArray[currentIndex]}
         onError={() => handlePhotoError(this)}
