@@ -1,18 +1,25 @@
 import { parseISO } from "date-fns";
 
-function parseFirstPhoto(photosJSON) {
+function parsePhotos(photosJSON) {
   if (!photosJSON) {
-    return null;
+    return [];
   }
+
   try {
     const photos = JSON.parse(photosJSON);
-    if (!Array.isArray(photos) || photos.length === 0) {
-      return null;
+
+    if (!Array.isArray(photos)) {
+      return [];
     }
-    return photos[0];
+
+    return photos.filter(
+      (photo) =>
+        (typeof photo === "string" || photo instanceof String) &&
+        photo.trim() !== "",
+    );
   } catch {
-    console.log("JSON not able to parse the photo JSON string.");
-    return null;
+    console.log("unable to parse JSON string");
+    return [];
   }
 }
 
@@ -100,7 +107,7 @@ function formatTime(timeLiteral) {
 }
 
 export {
-  parseFirstPhoto,
+  parsePhotos,
   formatPrice,
   formatSQFT,
   formatLocation,
