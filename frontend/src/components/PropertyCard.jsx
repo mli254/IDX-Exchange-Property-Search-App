@@ -16,7 +16,7 @@ export default function PropertyCard({ property }) {
           <p>
             <strong>{Math.floor(property.Beds) || "-"}</strong> beds{" | "}
             <strong>{Math.floor(property.Baths) || "-"}</strong> baths{" | "}
-            <strong>{helper.formatSQFT(property.SQFT) || "-"}</strong> sqft
+            <strong>{helper.formatNumber(property.SQFT) || "-"}</strong> sqft
           </p>
           <div className="my-2 text-[0.9rem] text-gray-600">
             <p>{property.Address || "—"}</p>

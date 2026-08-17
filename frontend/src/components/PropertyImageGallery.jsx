@@ -57,7 +57,7 @@ export default function PropertyImageGallery({ imageArray }) {
         </div>
       )}
       <div className="w-full">
-        <div className="flex items-center bg-black mt-1 h-100">
+        <div className="flex items-center bg-gray-300 mt-2 h-100 rounded-lg">
           <img
             className="max-h-full m-auto cursor-pointer"
             key={currentIndex}

@@ -23,6 +23,26 @@ function parsePhotos(photosJSON) {
   }
 }
 
+function parseCamelCase(camelCaseString) {
+  if (!camelCaseString) {
+    return;
+  }
+  const regex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
+  const convertedString = camelCaseString.replace(regex, '$1$4 $2$3$5');
+  if (!convertedString) {
+    return camelCaseString;
+  }
+  return convertedString
+}
+
+function parseCommas(commaString) {
+  if (!commaString) {
+    return "";
+  }
+
+  return (commaString.replace(/,/g, ', '));
+}
+
 function formatPrice(price, locale = "en-US", currency = "USD") {
   if (!price) {
     return null;
@@ -34,12 +54,16 @@ function formatPrice(price, locale = "en-US", currency = "USD") {
   }).format(price);
 }
 
-function formatSQFT(sqft) {
-  if (!sqft) {
+function formatNumber(number) {
+  if (!number) {
     return null;
   }
 
-  return sqft.toLocaleString();
+  if (isNaN(number)) {
+    return null;
+  }
+
+  return number.toLocaleString();
 }
 
 function formatLocation(city, state, zip) {
@@ -108,8 +132,10 @@ function formatTime(timeLiteral) {
 
 export {
   parsePhotos,
+  parseCamelCase,
+  parseCommas,
   formatPrice,
-  formatSQFT,
+  formatNumber,
   formatLocation,
   formatDate,
   formatTime,

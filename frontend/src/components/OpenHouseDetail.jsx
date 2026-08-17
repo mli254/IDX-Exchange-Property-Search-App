@@ -8,7 +8,7 @@ function parseRemarksJSON(all_data) {
 export default function OpenHouseDetail({ openhouse }) {
   const remarks = parseRemarksJSON(openhouse.all_data);
   return (
-    <div className="bg-gray-300 p-2 mb-3 rounded-lg">
+    <div className="bg-gray-100 p-2 mb-3 rounded-lg">
       <p>
         <strong>Start Date:</strong>{" "}
         {formatDate(openhouse.OpenHouseDate) || "N/A"}
