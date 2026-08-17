@@ -13,8 +13,14 @@ export default function PropertyImageGallery({ imageArray }) {
     event.currentTarget.src = placeholderImage;
   }
 
-  function handleThumbnailClick(index) {
+  function handleThumbnailClick(event, index) {
     setCurrentIndex(index);
+    event.currentTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+      container: "nearest"
+    });
   }
 
   function handleEsc(event) {
@@ -74,7 +80,7 @@ export default function PropertyImageGallery({ imageArray }) {
                 className={`box-border rounded-lg w-18 h-12 object-cover shrink-0 ${currentIndex === index ? "border-2 border-black" : ""}`}
                 key={index}
                 src={image}
-                onClick={() => handleThumbnailClick(index)}
+                onClick={(event) => handleThumbnailClick(event, index)}
                 onError={handlePhotoError}
               />
             ))}
