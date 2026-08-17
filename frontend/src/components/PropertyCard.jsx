@@ -7,7 +7,7 @@ export default function PropertyCard({ property }) {
 
   return (
     <Link to={`/property/${property.ListingID}`}>
-      <div className="box rounded-lg shadow-lg shadow-gray-400 hover:shadow-lg hover:shadow-blue-900">
+      <div className="rounded-lg shadow-sm shadow-gray-400 bg-white hover:shadow-lg hover:shadow-blue-900">
         <PropertyImageCarousel imageArray={photoArray} />
         <div className="flex flex-col p-2 m-2">
           <h2 className="pb-2 font-[700] text-2xl">

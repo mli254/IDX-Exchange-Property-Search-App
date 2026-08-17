@@ -5,6 +5,7 @@ import LoadingCard from "../components/LoadingCard";
 import ErrorCard from "../components/ErrorCard";
 import OpenHouseDetail from "../components/OpenHouseDetail";
 import PropertyImageGallery from "../components/PropertyImageGallery";
+import PropertyMap from "../components/PropertyMap";
 import * as helper from "../utils/helper";
 
 export default function PropertyDetailPage() {
@@ -53,6 +54,8 @@ export default function PropertyDetailPage() {
     loadOpenhouses();
   }, [id]);
 
+  const photos = helper.parsePhotos(propertyDetail?.results?.[0]?.L_Photos);
+
   return (
     <div className="p-3 m-3">
       <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">
@@ -62,8 +65,8 @@ export default function PropertyDetailPage() {
       {error && <ErrorCard error={errorMsg} />}
       {!loading && !error && propertyDetail?.results && (
         <div className="flex flex-col">
-          <PropertyImageGallery imageArray={helper.parsePhotos(propertyDetail?.results[0].L_Photos)}/>
-          <div className="box w-200 m-auto my-5 px-5 py-3 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
+          <PropertyImageGallery imageArray={photos} />
+          <div className="w-200 m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-4xl">
               {helper.formatPrice(propertyDetail.results[0].L_SystemPrice) ||
                 "—"}
@@ -104,23 +107,33 @@ export default function PropertyDetailPage() {
               </p>
             )}
           </div>
-          <div className="box w-200 m-auto my-1 px-5 pt-3 pb-5 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
+          <div className="w-200 m-auto my-1 px-5 pt-3 pb-5 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mb-3">About</h2>
             <p>
               {propertyDetail.results[0].L_Remarks ||
                 "Description unavailable."}
             </p>
           </div>
-          <div className="box w-200 m-auto my-5 px-5 py-3 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
+          <div className="w-200 m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mb-3">Openhouse Events</h2>
             {propertyOpenhouses?.openhouses?.length > 0 ? (
               propertyOpenhouses.openhouses.map((openhouse) => (
-                <OpenHouseDetail key={openhouse.L_ListingID} openhouse={openhouse}/>
+                <OpenHouseDetail
+                  key={openhouse.L_ListingID}
+                  openhouse={openhouse}
+                />
               ))
             ) : (
               <p>No open houses scheduled.</p>
             )}
           </div>
+          {propertyDetail.results[0].LMD_MP_Latitude &&
+            propertyDetail.results[0].LMD_MP_Longitude && (
+              <PropertyMap
+                lat={propertyDetail.results[0].LMD_MP_Latitude}
+                long={propertyDetail.results[0].LMD_MP_Longitude}
+              />
+            )}
         </div>
       )}
     </div>

@@ -5,9 +5,7 @@ export default function PropertyImageCarousel({ imageArray }) {
   const counter = imageArray.length;
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (counter === 0) {
-    imageArray.push(placeholderImage);
-  }
+  const photos = counter > 0 ? imageArray : [placeholderImage];
 
   function handleNext(event) {
     event.preventDefault();
@@ -25,10 +23,9 @@ export default function PropertyImageCarousel({ imageArray }) {
     );
   }
 
-  function handlePhotoError(image) {
-    image.onError = "";
-    image.src = placeholderImage;
-    return true;
+  function handlePhotoError(event) {
+    event.currentTarget.onerror = null;
+    event.currentTarget.src = placeholderImage;
   }
 
   return (
@@ -36,12 +33,12 @@ export default function PropertyImageCarousel({ imageArray }) {
       <img
         className="rounded-t-lg min-w-full h-48 object-cover"
         key={currentIndex}
-        src={imageArray[currentIndex]}
-        onError={() => handlePhotoError(this)}
+        src={photos[currentIndex]}
+        onError={handlePhotoError}
         loading="lazy"
       />
       <div className="absolute bottom-0 right-0 m-1 px-1 pb-1 bg-black/50 rounded-lg text-white font-bold">
-        {currentIndex + 1} / {counter} photos
+        {currentIndex + 1} / {counter > 0 ? counter : counter + 1} photos
       </div>
       <button
         className="absolute top-[50%] left-0 -translate-y-[75%] m-1 p-1 pt-0 text-white text-2xl font-bold bg-black/70 rounded-xl cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed"

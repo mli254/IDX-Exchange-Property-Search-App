@@ -5,9 +5,7 @@ export default function Lightbox({ imageArray, startingIndex }) {
   const counter = imageArray.length;
   const [currentIndex, setCurrentIndex] = useState(startingIndex);
 
-  if (counter === 0) {
-    imageArray.push(placeholderImage);
-  }
+  const photos = counter > 0 ? imageArray : [placeholderImage];
 
   function handleNext(event) {
     event.preventDefault();
@@ -25,10 +23,9 @@ export default function Lightbox({ imageArray, startingIndex }) {
     );
   }
 
-  function handlePhotoError(image) {
-    image.onError = "";
-    image.src = placeholderImage;
-    return true;
+  function handlePhotoError(event) {
+    event.currentTarget.onerror = null;
+    event.currentTarget.src = placeholderImage;
   }
 
   return (
@@ -42,17 +39,17 @@ export default function Lightbox({ imageArray, startingIndex }) {
       >
         &larr;
       </button>
-      <div className="relative">
+      <div className="relative max-h-full">
         <img
           className="max-h-full m-auto"
           key={currentIndex}
-          src={imageArray[currentIndex]}
-          onError={() => handlePhotoError(this)}
+          src={photos[currentIndex]}
+          onError={handlePhotoError}
           onClick={(event) => event.stopPropagation()}
           loading="lazy"
         />
-        <div className="absolute top-0 right-0 m-2 px-1 pb-1 bg-black/50 rounded-lg text-white font-bold">
-          {currentIndex + 1} / {counter} photos
+        <div className="absolute top-0 right-0 m-3 px-1 pb-1 bg-black/50 rounded-lg text-white font-bold">
+          {currentIndex + 1} / {counter > 0 ? counter : counter + 1} photos
         </div>
       </div>
 
