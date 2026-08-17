@@ -4,9 +4,8 @@ import api from "../api/client";
 import LoadingCard from "../components/LoadingCard";
 import ErrorCard from "../components/ErrorCard";
 import OpenHouseDetail from "../components/OpenHouseDetail";
-import * as helper from "../utils/helper";
 import PropertyImageGallery from "../components/PropertyImageGallery";
-
+import * as helper from "../utils/helper";
 
 export default function PropertyDetailPage() {
   const { id } = useParams();
@@ -15,7 +14,6 @@ export default function PropertyDetailPage() {
   const [errorMsg, setErrorMsg] = useState([]);
   const [propertyDetail, setPropertyDetail] = useState([]);
   const [propertyOpenhouses, setPropertyOpenhouses] = useState([]);
-  // const [propertyPhotos, setPropertyPhotos] = useState([]);
 
   useEffect(() => {
     const loadPropertyDetail = async () => {
@@ -55,7 +53,6 @@ export default function PropertyDetailPage() {
     loadOpenhouses();
   }, [id]);
 
-  // price, address, beds, baths, sqft, year built, description, property details, open houses
   return (
     <div className="p-3 m-3">
       <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">
@@ -66,7 +63,7 @@ export default function PropertyDetailPage() {
       {!loading && !error && propertyDetail?.results && (
         <div className="flex flex-col">
           <PropertyImageGallery imageArray={helper.parsePhotos(propertyDetail?.results[0].L_Photos)}/>
-          <div className="box w-200 m-auto mt-10 mb-5 px-5 py-3 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
+          <div className="box w-200 m-auto my-5 px-5 py-3 rounded-lg shadow-sm shadow-gray-400 border-1 border-gray-200">
             <h2 className="font-[700] text-4xl">
               {helper.formatPrice(propertyDetail.results[0].L_SystemPrice) ||
                 "—"}
@@ -102,7 +99,7 @@ export default function PropertyDetailPage() {
               sqft
             </p>
             {propertyDetail.results[0].YearBuilt && (
-              <p className="mt-3 p-2 bg-gray-300 font-[600] text-gray-700 rounded-lg">
+              <p className="mt-3 p-2 bg-blue-200 font-[600] text-gray-700 rounded-lg">
                 Built in {propertyDetail.results[0].YearBuilt}
               </p>
             )}
