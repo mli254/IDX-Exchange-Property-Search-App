@@ -29,9 +29,9 @@ export default function Lightbox({ imageArray, startingIndex }) {
   }
 
   return (
-    <div className="flex items-center justify-between w-full h-full">
+    <div>
       <button
-        className="m-1 mx-5 p-1 pt-0 text-white text-2xl font-bold bg-black/70 rounded-xl border-1 border-white cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed"
+      className="z-2 absolute left-4 top-[50%] -translate-y-[50%] m-1 mx-5 p-1 pt-0 text-white text-2xl font-bold bg-black/70 rounded-xl border-1 border-white cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed"
         onClick={(e) => {
           handlePrev(e);
         }}
@@ -39,9 +39,11 @@ export default function Lightbox({ imageArray, startingIndex }) {
       >
         &larr;
       </button>
-      <div className="relative max-h-full">
+      <div 
+      className="absolute inset-0 flex items-center justify-center"
+      >
         <img
-          className="max-h-full m-auto"
+        className="max-h-[90dvh] max-w-[90vw] object-contain"
           key={currentIndex}
           src={photos[currentIndex]}
           onError={handlePhotoError}
@@ -54,7 +56,7 @@ export default function Lightbox({ imageArray, startingIndex }) {
       </div>
 
       <button
-        className="m-1 mx-5 p-1 pt-0 text-white text-2xl font-bold bg-black/70 rounded-xl border-1 border-white cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed"
+      className="z-2 m-1 mx-5 p-1 pt-0 text-white text-2xl font-bold bg-black/70 rounded-xl border-1 border-white cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed absolute right-4 top-[50%] -translate-y-[50%]"
         onClick={handleNext}
         disabled={counter < 2}
       >

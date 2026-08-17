@@ -66,7 +66,7 @@ export default function PropertyDetailPage() {
       {!loading && !error && propertyDetail?.results && (
         <div className="flex flex-col">
           <PropertyImageGallery imageArray={photos} />
-          <div className="w-200 m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
+          <div className="w-[90%] md:w-[60%] m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-4xl">
               {helper.formatPrice(propertyDetail.results[0].L_SystemPrice) ||
                 "—"}
@@ -107,14 +107,14 @@ export default function PropertyDetailPage() {
               </p>
             )}
           </div>
-          <div className="w-200 m-auto my-1 px-5 pt-3 pb-5 rounded-lg bg-white border-2 border-gray-200">
+          <div className="w-[90%] md:w-[60%] m-auto my-1 px-5 pt-3 pb-5 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mb-3">About</h2>
             <p>
               {propertyDetail.results[0].L_Remarks ||
                 "Description unavailable."}
             </p>
           </div>
-          <div className="w-200 m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
+          <div className="w-[90%] md:w-[60%] m-auto my-5 px-5 py-3 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mb-3">Openhouse Events</h2>
             {propertyOpenhouses?.openhouses?.length > 0 ? (
               propertyOpenhouses.openhouses.map((openhouse) => (

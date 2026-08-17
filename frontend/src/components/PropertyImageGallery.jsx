@@ -48,7 +48,7 @@ export default function PropertyImageGallery({ imageArray }) {
     <div>
       {lightboxVisible && (
         <div
-          className="z-1 fixed top-0 left-0 w-full h-full bg-black/50"
+          className="z-1 fixed inset-0 h-dvh w-full bg-black/50"
           tabIndex={0}
           onKeyDown={handleEsc}
           onClick={hideLightBox}

@@ -1,7 +1,7 @@
 export default function PropertyMap({ lat, long }) {
   const apiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
   return (
-    <div className="w-200 m-auto rounded-lg border-2 border-gray-200">
+    <div className="w-[90%] md:w-[60%] m-auto rounded-lg border-2 border-gray-200">
       <iframe
         className="rounded-lg"
         width="100%"
