@@ -58,37 +58,37 @@ export default function PropertyDetailPage() {
   const photos = helper.parsePhotos(property?.L_Photos);
   const details = [];
   // const features = [];
-  
+
   if (property) {
     // checking for property details like property type, year built, lot size, garage spaces, and flooring type
     if (property.L_Type_) {
       details.push({
         desc: "Property Type",
-        value: helper.parseCamelCase(property.L_Type_)
+        value: helper.parseCamelCase(property.L_Type_),
       });
     } else if (property.L_Class) {
       details.push({
         desc: "Property Type",
-        value: property.L_Class
+        value: property.L_Class,
       });
     }
 
     if (property.StoriesTotal) {
       details.push({
         desc: "Levels",
-        value: property.StoriesTotal
+        value: property.StoriesTotal,
       });
     } else if (property.L_Keyword7) {
       details.push({
         desc: "Levels",
-        value: helper.parseCamelCase(property.L_Keyword7)
+        value: helper.parseCamelCase(property.L_Keyword7),
       });
     }
 
     if (property.YearBuilt) {
       details.push({
         desc: "Year Built",
-        value: property.YearBuilt
+        value: property.YearBuilt,
       });
     }
 
@@ -97,7 +97,7 @@ export default function PropertyDetailPage() {
       if (lotSize) {
         details.push({
           desc: "Lot Size",
-          value: `${lotSize} sqft`
+          value: `${lotSize} sqft`,
         });
       }
     }
@@ -105,19 +105,20 @@ export default function PropertyDetailPage() {
     if (property.L_Keyword5) {
       details.push({
         desc: "Parking",
-        value: `${property.L_Keyword5} Car Garage`
+        value: `${property.L_Keyword5} Car Garage`,
       });
     }
 
     if (property.Flooring) {
       details.push({
         desc: "Flooring Type",
-        value: `${helper.parseCommas(property.Flooring)}`
+        value: `${helper.parseCommas(property.Flooring)}`,
       });
     }
 
     // console.log(details);
-    // possible additional above: 
+    // move flooring into property details
+    // possible additional above:
     // heating type, cooling type, interior features, fireplace, appliances,
     // structure type, patio features, roof type, fencing,
     // checking for y/n fields, e.g. private pool, attached garage, view type newly constructed
@@ -143,11 +144,10 @@ export default function PropertyDetailPage() {
               </p>
             )}
             <h2 className="font-[700] text-2xl sm:text-4xl">
-              {helper.formatPrice(property.L_SystemPrice) ||
-                "—"}
+              {helper.formatPrice(property.L_SystemPrice) || "—"}
             </h2>
             <div className="pb-2 text-md text-gray-500">
-                {}
+              {}
               <p>
                 {property.L_Address ? (
                   property.L_Address + ", "
@@ -164,14 +164,10 @@ export default function PropertyDetailPage() {
               </p>
             </div>
             <p className="text-xl">
-              <strong>
-                {Math.floor(property.L_Keyword2) || "-"}
-              </strong>{" "}
-              beds{" | "}
-              <strong>
-                {Math.floor(property.LM_Dec_3) || "-"}
-              </strong>{" "}
-              baths{" | "}
+              <strong>{Math.floor(property.L_Keyword2) || "-"}</strong> beds
+              {" | "}
+              <strong>{Math.floor(property.LM_Dec_3) || "-"}</strong> baths
+              {" | "}
               <strong>
                 {helper.formatNumber(property.LM_Int2_3) || "-"}
               </strong>{" "}
@@ -180,15 +176,19 @@ export default function PropertyDetailPage() {
           </div>
           <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-1 px-5 pt-5 pb-5 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mt-1 mb-3">About</h2>
-            <p>
-              {property.L_Remarks ||
-                "Description unavailable."}
-            </p>
+            <p>{property.L_Remarks || "Description unavailable."}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
               {details.map((detail, index) => (
-                <p className="inline bg-blue-100 p-2 rounded-md flex flex-col content-center" key={index}>
-                  <span className="block font-bold text-sm sm:text-base">{detail.value}</span>
-                  <span className="block text-xs sm:text-sm">{detail.desc}</span>
+                <p
+                  className="inline bg-blue-100 p-2 rounded-md flex flex-col content-center"
+                  key={index}
+                >
+                  <span className="block font-bold text-sm sm:text-base">
+                    {detail.value}
+                  </span>
+                  <span className="block text-xs sm:text-sm">
+                    {detail.desc}
+                  </span>
                 </p>
               ))}
             </div>
@@ -206,13 +206,12 @@ export default function PropertyDetailPage() {
               <p>No open houses scheduled.</p>
             )}
           </div>
-          {property.LMD_MP_Latitude &&
-            property.LMD_MP_Longitude && (
-              <PropertyMap
-                lat={property.LMD_MP_Latitude}
-                long={property.LMD_MP_Longitude}
-              />
-            )}
+          {property.LMD_MP_Latitude && property.LMD_MP_Longitude && (
+            <PropertyMap
+              lat={property.LMD_MP_Latitude}
+              long={property.LMD_MP_Longitude}
+            />
+          )}
         </div>
       )}
     </div>

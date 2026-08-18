@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import * as helper from "../utils/helper";
-import PropertyImageCarousel from "./PropertyImageCarousel ";
+import PropertyImageCarousel from "./PropertyImageCarousel";
 
 export default function PropertyCard({ property }) {
   const photoArray = helper.parsePhotos(property.Photos);
