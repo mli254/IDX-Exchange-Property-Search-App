@@ -11,12 +11,15 @@ export default function PropertyCard({ property }) {
         <PropertyImageCarousel imageArray={photoArray} />
         <div className="flex flex-col p-2 m-2">
           <h2 className="pb-2 font-[700] text-2xl">
-            {helper.formatPrice(property.Price) || "—"}
+            {helper.formatPrice(property.Price) || "Price: N/A"}
           </h2>
           <p>
             <strong>{Math.floor(property.Beds) || "-"}</strong> beds{" | "}
             <strong>{Math.floor(property.Baths) || "-"}</strong> baths{" | "}
-            <strong>{helper.formatNumber(property.SQFT) || "-"}</strong> sqft
+            <strong>{helper.formatNumber(property.SQFT) || "-"}</strong>{" "}
+            {property.LivingAreaUnits === "SquareMeters"
+              ? "sq. meters"
+              : "sqft"}
           </p>
           <div className="my-2 text-[0.9rem] text-gray-600">
             <p>{property.Address || "—"}</p>

@@ -33,9 +33,12 @@ export default function PropertyFilters({
           <legend className="m-1 p-1 font-bold">
             Please enter filter values here:
           </legend>
-          <div className="grid grid-cols-2">
-            <div>
-              <label htmlFor="city-filter" className="font-bold mx-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="city-filter"
+                className="font-bold mx-3 inline sm:block lg:inline"
+              >
                 City:{" "}
               </label>
               <input
@@ -48,8 +51,11 @@ export default function PropertyFilters({
                 className="bg-white border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="zip-filter" className="font-bold mx-3">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="zip-filter"
+                className="font-bold mx-3 inline sm:block lg:inline"
+              >
                 Zipcode:{" "}
               </label>
               <input
@@ -62,8 +68,11 @@ export default function PropertyFilters({
                 className="bg-white border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="minPrice-filter" className="font-bold mx-3">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="minPrice-filter"
+                className="font-bold mx-3 md:block lg:inline"
+              >
                 Minimum Price:{" "}
               </label>
               <input
@@ -76,8 +85,11 @@ export default function PropertyFilters({
                 className="bg-white border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="maxPrice-filter" className="font-bold mx-3">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="maxPrice-filter"
+                className="font-bold mx-3 md:block lg:inline"
+              >
                 Maximum Price:{" "}
               </label>
               <input
@@ -90,8 +102,11 @@ export default function PropertyFilters({
                 className="bg-white border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="beds-filter" className="font-bold mx-3">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="beds-filter"
+                className="font-bold mx-3 md:block lg:inline"
+              >
                 Number of Beds:{" "}
               </label>
               <input
@@ -104,8 +119,11 @@ export default function PropertyFilters({
                 className="bg-white border-1 border-gray-200 p-1 m-1 placeholder:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="baths-filter" className="font-bold mx-3">
+            <div className="lg:whitespace-nowrap">
+              <label
+                htmlFor="baths-filter"
+                className="font-bold mx-3 md:block lg:inline"
+              >
                 Number of Baths:{" "}
               </label>
               <input

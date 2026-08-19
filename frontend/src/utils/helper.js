@@ -25,22 +25,36 @@ function parsePhotos(photosJSON) {
 
 function parseCamelCase(camelCaseString) {
   if (!camelCaseString) {
-    return;
+    return null;
   }
   const regex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
-  const convertedString = camelCaseString.replace(regex, '$1$4 $2$3$5');
+  const convertedString = camelCaseString.replace(regex, "$1$4 $2$3$5");
   if (!convertedString) {
     return camelCaseString;
   }
-  return convertedString
+  return convertedString;
 }
 
 function parseCommas(commaString) {
   if (!commaString) {
-    return "";
+    return null;
   }
 
-  return (commaString.replace(/,/g, ', '));
+  return commaString.replace(/,/g, ", ");
+}
+
+function parseCommaAndCamelCase(commaCamelString) {
+  if (!commaCamelString) {
+    return null;
+  }
+
+  const words = commaCamelString.split(",");
+
+  words.forEach((word, index, array) => {
+    array[index] = `${parseCamelCase(word)}`;
+  });
+
+  return words;
 }
 
 function formatPrice(price, locale = "en-US", currency = "USD") {
@@ -67,10 +81,12 @@ function formatNumber(number) {
 }
 
 function formatLocation(city, state, zip) {
+  // all present
   if (city && state && zip) {
     return `${city}, ${state} ${zip}`;
   }
 
+  // one is missing
   if (!city && state && zip) {
     return `${state} ${zip}`;
   }
@@ -79,11 +95,26 @@ function formatLocation(city, state, zip) {
     return `${city}, ${zip}`;
   }
 
-  if (!city && !state && parseInt(zip) > 0) {
+  if (!zip && city && state) {
+    return `${city}, ${state}`;
+  }
+
+  // two are missing
+  const parsedZip = parseInt(zip);
+  if (!city && !state && parsedZip > 0) {
     return `${zip}`;
   }
 
-  if (!city && !state && parseInt(zip) < 1) {
+  if (!city && !zip && state) {
+    return `${state}`;
+  }
+
+  if (!zip && !state && city) {
+    return `${city}`;
+  }
+
+  // all missing
+  if (!city && !state && (parsedZip < 1 || isNaN(parsedZip))) {
     return "—";
   }
 }
@@ -133,6 +164,7 @@ function formatTime(timeLiteral) {
 export {
   parsePhotos,
   parseCamelCase,
+  parseCommaAndCamelCase,
   parseCommas,
   formatPrice,
   formatNumber,

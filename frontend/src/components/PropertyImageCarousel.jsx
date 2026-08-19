@@ -47,14 +47,64 @@ export default function PropertyImageCarousel({ imageArray }) {
         }}
         disabled={counter < 2}
       >
-        <svg className="-translate-x-[0.75px]" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        <svg
+          className="-translate-x-[0.75px]"
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            {" "}
+            <path
+              d="M15 7L10 12L15 17"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></path>{" "}
+          </g>
+        </svg>
       </button>
       <button
         className="absolute top-[50%] right-0 -translate-y-[75%] m-1 p-1 text-white text-2xl font-bold bg-black/70 rounded-full cursor-pointer disabled:bg-gray-200/75 disabled:cursor-not-allowed"
         onClick={handleNext}
         disabled={counter < 2}
       >
-        <svg className="translate-x-[0.75px]" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>      
+        <svg
+          className="translate-x-[0.75px]"
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          transform="matrix(-1, 0, 0, 1, 0, 0)"
+          stroke="#ffffff"
+        >
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            {" "}
+            <path
+              d="M15 7L10 12L15 17"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></path>{" "}
+          </g>
+        </svg>
       </button>
     </div>
     // Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5

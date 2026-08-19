@@ -5,7 +5,7 @@ export default function PropertyMap({ lat, long }) {
 
   return (
     <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-2 px-5 py-5 rounded-lg bg-white border-2 border-gray-200">
-      <h1 className="font-[700] text-2xl mt-1 mb-3">Around This Home</h1>
+      <h1 className="font-[700] text-2xl mt-1 mb-3">Location</h1>
       <iframe
         className="rounded-lg m-auto"
         width="100%"
@@ -30,14 +30,14 @@ export default function PropertyMap({ lat, long }) {
           width="16px"
           height="16px"
           viewBox="0 0 52 52"
-          enable-background="new 0 0 52 52"
-          xml:space="preserve"
+          enableBackground="new 0 0 52 52"
+          xmlSpace="preserve"
         >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
           <g
             id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           ></g>
           <g id="SVGRepo_iconCarrier">
             {" "}

@@ -5,6 +5,7 @@ import LoadingCard from "../components/LoadingCard";
 import ErrorCard from "../components/ErrorCard";
 import OpenHouseDetail from "../components/OpenHouseDetail";
 import PropertyImageGallery from "../components/PropertyImageGallery";
+import PropertyDetails from "../components/PropertyDetails";
 import PropertyMap from "../components/PropertyMap";
 import * as helper from "../utils/helper";
 
@@ -57,10 +58,11 @@ export default function PropertyDetailPage() {
   const property = propertyDetail?.results?.[0];
   const photos = helper.parsePhotos(property?.L_Photos);
   const details = [];
-  // const features = [];
+  const interiorFeatures = [];
+  const exteriorFeatures = [];
 
   if (property) {
-    // checking for property details like property type, year built, lot size, garage spaces, and flooring type
+    // checking for property details like property type, # of levels/stories, year built, lot size, garage spaces
     if (property.L_Type_) {
       details.push({
         desc: "Property Type",
@@ -81,7 +83,7 @@ export default function PropertyDetailPage() {
     } else if (property.L_Keyword7) {
       details.push({
         desc: "Levels",
-        value: helper.parseCamelCase(property.L_Keyword7),
+        value: helper.parseCommaAndCamelCase(property.L_Keyword7).join(", "),
       });
     }
 
@@ -95,10 +97,17 @@ export default function PropertyDetailPage() {
     if (property.L_Keyword1) {
       const lotSize = helper.formatNumber(parseInt(property.L_Keyword1));
       if (lotSize) {
-        details.push({
-          desc: "Lot Size",
-          value: `${lotSize} sqft`,
-        });
+        if (property.LotSizeUnits && property.LotSizeUnits === "Acres") {
+          details.push({
+            desc: "Lot Size",
+            value: `${lotSize} acres`,
+          });
+        } else {
+          details.push({
+            desc: "Lot Size",
+            value: `${lotSize} sqft`,
+          });
+        }
       }
     }
 
@@ -109,20 +118,199 @@ export default function PropertyDetailPage() {
       });
     }
 
-    if (property.Flooring) {
+    if (property.SeniorCommunityYN) {
       details.push({
-        desc: "Flooring Type",
-        value: `${helper.parseCommas(property.Flooring)}`,
+        desc: "Community Type",
+        value: "Senior Community",
       });
     }
 
-    // console.log(details);
-    // move flooring into property details
-    // possible additional above:
-    // heating type, cooling type, interior features, fireplace, appliances,
-    // structure type, patio features, roof type, fencing,
-    // checking for y/n fields, e.g. private pool, attached garage, view type newly constructed
-    // maybe: high school district
+    if (property.NewConstructionYN) {
+      details.push({
+        desc: "Status",
+        value: "Newly Constructed",
+      });
+    }
+
+    // checking for interior property details like:
+    // heating/cooling, interior features, appliances, fireplaces, spas, room types, flooring type
+    if (property.HeatingYN && property.HeatingYN > 0) {
+      const heatingType = helper.parseCommaAndCamelCase(property.Heating);
+      interiorFeatures.push({
+        desc: "Heating",
+        value: heatingType || "Included",
+      });
+    }
+
+    if (property.CoolingYN && property.CoolingYN > 0) {
+      const coolingType = helper.parseCommaAndCamelCase(property.Cooling);
+      interiorFeatures.push({
+        desc: "Cooling",
+        value: coolingType || "Included",
+      });
+    }
+
+    if (property.InteriorFeatures) {
+      interiorFeatures.push({
+        desc: "Interior Features",
+        value: helper.parseCommaAndCamelCase(property.InteriorFeatures),
+      });
+    }
+
+    if (property.Appliances) {
+      interiorFeatures.push({
+        desc: "Appliances",
+        value: helper.parseCommaAndCamelCase(property.Appliances),
+      });
+    }
+
+    if (property.FireplaceYN && property.FireplaceYN > 0) {
+      const fireplaceFeatures = helper.parseCommaAndCamelCase(
+        property.FireplaceFeatures,
+      );
+      if (fireplaceFeatures && fireplaceFeatures[0] !== "None") {
+        interiorFeatures.push({
+          desc: "Fireplace",
+          value: fireplaceFeatures,
+        });
+      } else {
+        interiorFeatures.push({
+          desc: "Fireplace",
+          value: "Included",
+        });
+      }
+    }
+
+    if (property.SpaYN && property.SpaYN > 0) {
+      const spaFeatures = helper.parseCommaAndCamelCase(property.SpaFeatures);
+      if (spaFeatures && spaFeatures[0] !== "None") {
+        interiorFeatures.push({
+          desc: "Spa",
+          value: spaFeatures,
+        });
+      } else {
+        interiorFeatures.push({
+          desc: "Spa",
+          value: "Included",
+        });
+      }
+    }
+
+    if (property.RoomType) {
+      interiorFeatures.push({
+        desc: "Types of Rooms Available",
+        value: helper.parseCommaAndCamelCase(property.RoomType),
+      });
+    }
+
+    if (property.Flooring) {
+      interiorFeatures.push({
+        desc: "Flooring Type",
+        value: helper.parseCommaAndCamelCase(property.Flooring),
+      });
+    }
+
+    // checking for exterior property details like:
+    // architectural style, patio features, water source, pool, view, community features, security features, lot features
+    // roof type, fencing, garage: attached, property: attached
+    if (property.ArchitecturalStyle) {
+      exteriorFeatures.push({
+        desc: "Architectural Style",
+        value: helper.parseCommaAndCamelCase(property.ArchitecturalStyle),
+      });
+    }
+
+    if (property.PatioAndPorchFeatures) {
+      exteriorFeatures.push({
+        desc: "Patio and Porch",
+        value: helper.parseCommaAndCamelCase(property.PatioAndPorchFeatures),
+      });
+    }
+
+    if (property.WaterSource) {
+      exteriorFeatures.push({
+        desc: "Water Source",
+        value: helper.parseCommaAndCamelCase(property.WaterSource),
+      });
+    }
+
+    if (property.PoolPrivateYN || property.PoolFeatures) {
+      if (property.PoolFeatures) {
+        const poolFeatures = helper.parseCommaAndCamelCase(
+          property.PoolFeatures,
+        );
+        if (poolFeatures[0] !== "None") {
+          if (property.PoolPrivateYN > 0 && !poolFeatures.includes("Private")) {
+            poolFeatures.push("Private");
+          }
+          exteriorFeatures.push({
+            desc: "Pool Features",
+            value: poolFeatures,
+          });
+        }
+      } else if (property.PoolPrivateYN > 0) {
+        exteriorFeatures.push({
+          desc: "Pool Features",
+          value: "Private",
+        });
+      }
+    }
+
+    if (property.ViewYN && property.View && property.ViewYN > 0) {
+      exteriorFeatures.push({
+        desc: "View",
+        value: helper.parseCommaAndCamelCase(property.View),
+      });
+    }
+
+    if (property.CommunityFeatures) {
+      exteriorFeatures.push({
+        desc: "Communities",
+        value: helper.parseCommaAndCamelCase(property.CommunityFeatures),
+      });
+    }
+
+    if (property.SecurityFeatures) {
+      exteriorFeatures.push({
+        desc: "Security Features",
+        value: helper.parseCommaAndCamelCase(property.SecurityFeatures),
+      });
+    }
+
+    if (property.LotFeatures) {
+      exteriorFeatures.push({
+        desc: "Lot Features",
+        value: helper.parseCommaAndCamelCase(property.LotFeatures),
+      });
+    }
+
+    if (property.Roof) {
+      exteriorFeatures.push({
+        desc: "Roofing",
+        value: helper.parseCommaAndCamelCase(property.Roof),
+      });
+    }
+
+    if (property.Fencing) {
+      exteriorFeatures.push({
+        desc: "Fencing",
+        value: helper.parseCommaAndCamelCase(property.Fencing),
+      });
+    }
+
+    if (property.AttachedGarageYN && property.AttachedGarageYN > 0) {
+      exteriorFeatures.push({
+        desc: "Garage",
+        value: "Attached",
+      });
+    }
+
+    if (property.PropertyAttachedYN && property.PropertyAttachedYN > 0) {
+      exteriorFeatures.push({
+        desc: "Property",
+        value: "Attached to Another Structure",
+      });
+    }
   }
 
   return (
@@ -144,7 +332,7 @@ export default function PropertyDetailPage() {
               </p>
             )}
             <h2 className="font-[700] text-2xl sm:text-4xl">
-              {helper.formatPrice(property.L_SystemPrice) || "—"}
+              {helper.formatPrice(property.L_SystemPrice) || "Price: N/A"}
             </h2>
             <div className="pb-2 text-md text-gray-500">
               {}
@@ -171,7 +359,9 @@ export default function PropertyDetailPage() {
               <strong>
                 {helper.formatNumber(property.LM_Int2_3) || "-"}
               </strong>{" "}
-              sqft
+              {property.LivingAreaUnits === "SquareMeters"
+                ? "sq. meters"
+                : "sqft"}
             </p>
           </div>
           <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-1 px-5 pt-5 pb-5 rounded-lg bg-white border-2 border-gray-200">
@@ -192,6 +382,13 @@ export default function PropertyDetailPage() {
                 </p>
               ))}
             </div>
+          </div>
+          <div className="w-full sm:w-[90%] md:w-[60%] m-auto mt-5 mb-1 px-5 py-5 rounded-lg bg-white border-2 border-gray-200">
+            <h2 className="font-[700] text-2xl mt-1 mb-3">Property Details</h2>
+            <PropertyDetails
+              interiorFeatures={interiorFeatures}
+              exteriorFeatures={exteriorFeatures}
+            />
           </div>
           <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-5 px-5 py-5 rounded-lg bg-white border-2 border-gray-200">
             <h2 className="font-[700] text-2xl mt-1 mb-3">Openhouse Events</h2>
