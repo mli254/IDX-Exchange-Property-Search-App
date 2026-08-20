@@ -1,12 +1,14 @@
 # IDX-Exchange-Property-Search-App
 ## Description
-A property search application created for the IDX Exchange internship.
+A property search application created for the IDX Exchange internship. Using real MLS data, the application displays multiple property listings via a grid of card elements. Users can filter the properties by city name, zipcode, minimum price, maximum price, number of beds, and number of baths. Clicking on a card will navigate to a separate page that provides more detailed information about the specific property, such as interior features, room types, and heating/cooling information. 
 
 ### Tech Stack:
 - Backend
-  - Node.js / Express.js
+  - Node.js (ver. 24.16.0)
+  - Express.js (ver. 5.2.1)
 - Frontend
-  - React
+  - React (ver. 19.2.7)
+  - TailwindCSS (ver. 4.3.3)
 - Database
   - MySQL 8 (Docker Container)
 
