@@ -36,8 +36,8 @@ export default function ListingsPage() {
   };
   const DEFAULT_SORT = {
     sortBy: "default",
-    sortOrder: "asc"
-  }
+    sortOrder: "asc",
+  };
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,11 +65,20 @@ export default function ListingsPage() {
     window.scrollTo(0, 0);
   }
 
-  function changeSort(event) {
+  function changeSortBy(event) {
     const { name, value } = event.target;
-    setSort(prevState => ({
+    setSort((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
+    }));
+  }
+
+  function changeSortOrder() {
+    const newOrder = sort.sortOrder === "asc" ? "desc" : "asc";
+    console.log("test");
+    setSort((prevState) => ({
+      ...prevState,
+      sortOrder: newOrder,
     }));
   }
 
@@ -114,27 +123,34 @@ export default function ListingsPage() {
         {!loading && !error && properties?.results?.length > 0 && (
           <>
             <div className="py-3 my-3 flex gap-5 justify-between">
-              <div className="">
+              <div>
                 Showing {properties?.offset + 1}-
                 {properties?.limit + properties?.offset < properties?.total
                   ? properties?.limit + properties?.offset
                   : properties?.total}{" "}
                 of {properties?.total} properties
               </div>
-              <div className="text-center">
-                Sort:{" "} 
+              <div className="flex gap-2 items-center">
+                <span>Sort:{" "}</span>
                 <select
-                name="sortBy"
-                value={sort.sortBy}
-                onChange={(event) => changeSort(event)}
-                className="text-center text-blue-900 font-bold"
+                  name="sortBy"
+                  value={sort.sortBy}
+                  onChange={(event) => changeSortBy(event)}
+                  className="text-center text-blue-900 font-bold"
                 >
-                <option value="default">Default</option>
-                <option value="price">Price</option>
-                <option value="date-listed">Date Listed</option>
-                <option value="square-footage">Square Footage</option>
-                <option value="beds">Number of Beds</option>
+                  <option value="default">Default</option>
+                  <option value="price">Price</option>
+                  <option value="date-listed">Date Listed</option>
+                  <option value="square-footage">Square Footage</option>
+                  <option value="beds">Number of Beds</option>
                 </select>
+                <button
+                  onClick={changeSortOrder}
+                  className="text-white font-bold bg-blue-900 p-1 pt-0 pr-2 rounded-lg cursor-pointer"
+                >
+                  &#8645;{" "}
+                  {sort.sortOrder === "asc" ? "Ascending" : "Descending"}
+                </button>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
