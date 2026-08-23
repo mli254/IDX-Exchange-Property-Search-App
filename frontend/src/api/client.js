@@ -16,6 +16,12 @@ const fetchProperties = async (params) => {
   if (params && params.offset) {
     queries.push(`offset=${params.offset}`);
   }
+  if (params && params.sortBy) {
+    queries.push(`sortBy=${params.sortBy}`);
+  }
+  if (params && params.sortOrder) {
+    queries.push(`sortOrder=${params.sortOrder}`);
+  }
   if (params && params.city) {
     queries.push(`city=${params.city}`);
   }

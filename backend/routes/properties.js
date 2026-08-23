@@ -32,8 +32,8 @@ router.get('/', async (req, res) => {
     const sortMap = {
         "default": "L_ListingID",
         "price": "L_SystemPrice",
-        "date listed": "ListingContractDate",
-        "square footage": "LM_Int2_3",
+        "date-listed": "ListingContractDate",
+        "square-footage": "LM_Int2_3",
         "beds": "L_Keyword2"
     }
 
@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ 
                 status: "bad request", 
                 error: 
-                `${req.query.sortBy} is not a valid parameter. For sorting, please choose one of: price, date listed, square footage, or beds.`
+                `${req.query.sortBy} is not a valid parameter. For sorting, please choose one of: default, price, date-listed, square-footage, or beds.`
             });
         }
     }
@@ -156,7 +156,7 @@ router.get('/', async (req, res) => {
         // 'AS' keyword allows customization of display names for fields in order to make output more readable 
         const [result] = await pool.query(
             `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_Zip AS Zipcode, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT, LivingAreaUnits, L_Photos as Photos 
-            FROM rets_property ${wherequery} ORDER BY ${sortBy} ${sortOrder}, L_ListingID ${sortOrder}
+            FROM rets_property ${wherequery} ORDER BY ${sortBy} ${sortOrder}, L_ListingID ASC
             LIMIT ? OFFSET ?;`, [...values, limit, offset]
         );
         return res

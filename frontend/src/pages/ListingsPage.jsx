@@ -34,28 +34,43 @@ export default function ListingsPage() {
     beds: "",
     baths: "",
   };
+  const DEFAULT_SORT = {
+    sortBy: "default",
+    sortOrder: "asc"
+  }
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
   const [currentPage, setCurrentPage] = useState(1);
   // const [itemsPerPage, setItemsPerPage] = useState(LIMIT);
   const [offsetPerPage, setOffsetPerPage] = useState(OFFSET);
+  const [sort, setSort] = useState(DEFAULT_SORT);
 
   function updateFilter(tempFilter) {
     setFilter(tempFilter);
     setOffsetPerPage(OFFSET);
     setCurrentPage(1);
+    setSort(DEFAULT_SORT);
   }
 
   function clearFilter() {
     setFilter(DEFAULT_PARAMS);
     setOffsetPerPage(OFFSET);
     setCurrentPage(1);
+    setSort(DEFAULT_SORT);
   }
 
   function changePage(pageNumber) {
     setCurrentPage(pageNumber);
     setOffsetPerPage((pageNumber - 1) * LIMIT);
     window.scrollTo(0, 0);
+  }
+
+  function changeSort(event) {
+    const { name, value } = event.target;
+    setSort(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   }
 
   useEffect(() => {
@@ -65,6 +80,7 @@ export default function ListingsPage() {
       const response = await api.fetchProperties({
         limit: LIMIT,
         offset: offsetPerPage,
+        ...sort,
         ...cleanParams(filter),
       });
       if (response.error) {
@@ -79,7 +95,7 @@ export default function ListingsPage() {
     };
 
     loadProperties();
-  }, [filter, offsetPerPage]);
+  }, [filter, offsetPerPage, sort]);
 
   return (
     <>
@@ -97,14 +113,30 @@ export default function ListingsPage() {
         {error && <ErrorCard error={errorMsg} />}
         {!loading && !error && properties?.results?.length > 0 && (
           <>
-            <div className="py-3 my-3">
-              Showing {properties?.offset + 1}-
-              {properties?.limit + properties?.offset < properties?.total
-                ? properties?.limit + properties?.offset
-                : properties?.total}{" "}
-              of {properties?.total} properties
+            <div className="py-3 my-3 flex gap-5 justify-between">
+              <div className="">
+                Showing {properties?.offset + 1}-
+                {properties?.limit + properties?.offset < properties?.total
+                  ? properties?.limit + properties?.offset
+                  : properties?.total}{" "}
+                of {properties?.total} properties
+              </div>
+              <div className="text-center">
+                Sort:{" "} 
+                <select
+                name="sortBy"
+                value={sort.sortBy}
+                onChange={(event) => changeSort(event)}
+                className="text-center text-blue-900 font-bold"
+                >
+                <option value="default">Default</option>
+                <option value="price">Price</option>
+                <option value="date-listed">Date Listed</option>
+                <option value="square-footage">Square Footage</option>
+                <option value="beds">Number of Beds</option>
+                </select>
+              </div>
             </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {properties?.results?.map((property) => (
                 <PropertyCard key={property.ListingID} property={property} />
