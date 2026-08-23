@@ -26,12 +26,22 @@ router.get('/', async (req, res) => {
     // est. default values
     let limit = 20;
     let offset = 0;
+    let sortBy = "L_ListingID"
+    let sortOrder = "ASC"
+    // possible sortBy values: price, date listed, square footage, or beds.
+    const sortMap = {
+        "default": "L_ListingID",
+        "price": "L_SystemPrice",
+        "date listed": "ListingContractDate",
+        "square footage": "LM_Int2_3",
+        "beds": "L_Keyword2"
+    }
 
     // incrementally append new param values as the conditions are handled below
     const conditions = [];
     const values = []; 
 
-    // handling query params
+    // handling limit and offset query params
     if (req.query.limit) {
         const param = paramValidation(req.query.limit, "limit", 1, 100);
 
@@ -52,6 +62,30 @@ router.get('/', async (req, res) => {
         offset = param.parsedParam;
     } 
 
+    // handling sorting query params
+    if (req.query.sortBy) {
+        if (req.query.sortBy in sortMap) {
+            sortBy = sortMap[req.query.sortBy];
+        } else {
+            return res.status(400).json({ 
+                status: "bad request", 
+                error: 
+                `${req.query.sortBy} is not a valid parameter. For sorting, please choose one of: price, date listed, square footage, or beds.`
+            });
+        }
+    }
+
+    if (req.query.sortOrder) {
+        if (req.query.sortOrder === "asc") {
+            sortOrder = "ASC";
+        }
+
+        if (req.query.sortOrder === "desc") {
+            sortOrder = "DESC"
+        }
+    }
+
+    // handling filter query params
     if (req.query.city) {
         // due to inconsistent whitespaces/casing, both sides of the query will need the additional modifiers
         // the parameterized comparison and value are then pushed to corresponding arrays
@@ -117,11 +151,12 @@ router.get('/', async (req, res) => {
         
         // for cleanliness of viewing, only selecting the rows we're filtering instead of the full row; 
         // this can be modified in the future
-        // an ORDER BY L_ListingID command is used to ensure the results are consistent
+        // ORDER BY can be controlled with query params, but L_ListingID is always a secondary parameter to 
+        // ensure the results are consistent, especially if an ORDER BY field may be null 
         // 'AS' keyword allows customization of display names for fields in order to make output more readable 
         const [result] = await pool.query(
             `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_Zip AS Zipcode, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT, LivingAreaUnits, L_Photos as Photos 
-            FROM rets_property ${wherequery} ORDER BY L_ListingID
+            FROM rets_property ${wherequery} ORDER BY ${sortBy} ${sortOrder}, L_ListingID ${sortOrder}
             LIMIT ? OFFSET ?;`, [...values, limit, offset]
         );
         return res
