@@ -3,8 +3,8 @@ import express from 'express';
 const logger = (req, res, next) => {
     const start = process.hrtime();
 
-    res.once("finish", () =>{
-        const [seconds, nanoseconds] = process.hrtime(start)
+    res.once("finish", () => {
+        const [seconds, nanoseconds] = process.hrtime(start);
         const milliseconds = (seconds * 1e3) + (nanoseconds * 1e-6);
         const log = {
             method: req.method,
