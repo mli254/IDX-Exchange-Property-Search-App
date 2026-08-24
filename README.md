@@ -80,6 +80,50 @@ CREATE INDEX idx_beds ON rets_property (L_Keyword2);
 CREATE INDEX idx_baths ON rets_property (LM_Dec_3);
 CREATE INDEX idx_city_price ON rets_property ((LOWER(TRIM(L_City))), L_SystemPrice);
 ```
+### `EXPLAIN` for SQL query performance
+The `EXPLAIN` or `EXPLAIN ANALYZE` commands can be used to check the performance of a given query. This information
+can be used to inform additional indexes on commonly accessed rows. For example, for a complex query such as:
+```bash
+SELECT * from rets_property where LOWER(TRIM(L_City))=LOWER(TRIM("Santa Cruz")) and L_SystemPrice >= 1000 and L_SystemPrice <= 1000000 and L_Zip = "95060" and L_Keyword2 = 2 and LM_Dec_3 = 1 order by ListingContractDate ASC, L_ListingID ASC;
+```
+The `EXPLAIN` command returns:
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
+|----|-------------|-------|------------|------|---------------|-----|---------|-----|------|----------|-------|
+| 1 | SIMPLE | rets_property | NULL | index_merge | idx_L_Zip,idx_zipcode,idx_price,idx_beds,idx_baths idx_city_price | idx_L_Zip,idx_baths | 83,4 | NULL | 9 | 2.27 | Using intersect(idx_L_Zip,idx_baths); Using where; Using filesort |
+
+* `id` — represents the step number in the execution plan.
+* `select_type` — categorizes the type of select query based on complexity; since the query only selected all rows using '*', it is classified as a `SIMPLE` query. 
+* `table` — name of the table used in the query.
+* `partitions` — shows the number of partitions in the table used in the query.
+* `type` — specifies the access type; if no indexes were present, the type would be `ALL`, indicating a full table scan, but here it indicates that indexes were used.
+* `possible_keys` — possible keys/indexes that could have been used in the query.
+* `keys_used` — the actual keys/indexes used in the query.
+* `key_len` — the length of the keys used
+* `ref` — specifies any references used while comparing columns.
+* `rows` — number of rows examined by the query
+* `filtered` — number of rows filtered using conditions in the `WHERE` clause.
+* `Extra` — any extra information regarding the query.
+
+`EXPLAIN ANALYZE` further informs us that the query took a total of 28.7 milliseconds.
+
+Using this information, we can create an additional composite index, and run the commands again.
+```sql
+CREATE INDEX idx_zip_baths ON rets_property (L_Zip, LM_Dec_3);
+```
+
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
+|----|-------------|-------|------------|------|---------------|-----|---------|-----|------|----------|-------|
+| 1 | SIMPLE | rets_property | NULL | ref | idx_L_Zip,idx_zipcode,idx_price,idx_beds,idx_baths,idx_zip_baths,idx_city_price | idx_zip_baths | 87 | const, const | 8 | 2.50 | Using where; Using filesort |
+
+Running `EXPLAIN ANALYZE` again shows a slight improvement to 24.7 milliseconds.
+
+Additionally, the output of `EXPLAIN ANALYZE` also provides a tree view of the query process. In reviewing the output, we can see that the sorting of the data is a process that takes a significant chunk of time. As a result, if we add another index on the column being used in the `ORDER BY` command:
+
+```sql
+CREATE INDEX idx_listingdate ON rets_property (ListingContractDate);
+```
+
+Running `EXPLAIN ANALYZE` again shows that the total duration has dropped significantly, down to 1.63 milliseconds. This can be repeated for another field that is used to sort the rows, namely the square footage, as price, number of beds, and the listing ID (default) already have indexes. 
 
 ## Running the App
 ### 1. Docker / SQL
@@ -136,6 +180,10 @@ Accepts the following filters:
     - an `integer` between 1-100 that determines how many rows to display; defaults to 20. 
 - `offset`
     - an `integer` that dictates the number of rows to skip; defaults to 0, and cannot be negative. 
+- `sortBy`
+    - `string` that represents a field by which to sort the data; only accepts the following as valid params: default, price, date-listed, square-footage, and beds
+- `sortOrder`
+    - `string` that determines whether to sort the data in ascending or descending order; only accepts "asc" or "desc"
 - `city`
     - `string` that represents a city name; ignores surrounding whitespace and is case-insensitive.
 - `zipcode`
@@ -155,12 +203,13 @@ Accepts the following filters:
 | Invalid Parameter Type | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is a numeric whole number."}` |
 | Invalid Parameter Range (Min) | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is greater than [min]"}` |
 | Invalid Parameter Range (Max) | `400` | `{status: "bad request", error: "Please ensure [parameter_name] parameter is less than [max]"}` |
+| Invalid Sort Field | `400` | `{status: "bad request", error: "[parameter_name] is not a valid parameter. For sorting, please choose one of: default, price, date-listed, square-footage, or beds."}` |
 
 The `400` HTTP code refers to a bad request, which indicates an error on the client side. 
 
 To access this endpoint:
 ```bash
-curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&city=[city_name]&zipcode=[zipcode]&minPrice=[num]&maxPrice=[num]&beds=[num]&baths=[num]
+curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&sortBy=[field]&sortOrder=[asc/desc]&city=[city_name]&zipcode=[zipcode]&minPrice=[num]&maxPrice=[num]&beds=[num]&baths=[num]
 ```
 Users should replace the placeholders in brackets, and only including the parameters needed, as all are optional.
 
