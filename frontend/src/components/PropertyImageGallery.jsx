@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import placeholderImage from "../assets/placeholder.png";
+// import placeholderImage from "../assets/placeholder.png";
 import Lightbox from "./Lightbox";
 
 export default function PropertyImageGallery({ imageArray }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxVisible, setLightboxVisible] = useState(false);
 
-  const photos = imageArray.length > 0 ? imageArray : [placeholderImage];
+  const photos = imageArray.length > 0 ? imageArray : ["/placeholder.png"];
 
   function handlePhotoError(event) {
     event.currentTarget.onerror = null;
-    event.currentTarget.src = placeholderImage;
+    event.currentTarget.src = "/placeholder.png";
   }
 
   function handleThumbnailClick(event, index) {

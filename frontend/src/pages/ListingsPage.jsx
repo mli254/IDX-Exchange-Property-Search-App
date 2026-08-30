@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ErrorBoundary, getErrorMessage } from "react-error-boundary";
 import api from "../api/client";
 import LoadingCard from "../components/LoadingCard";
 import ErrorCard from "../components/ErrorCard";
@@ -112,52 +113,70 @@ export default function ListingsPage() {
         <h1 className="font-bold text-3xl border-b-3 pb-1 border-blue-900">
           Listing Page
         </h1>
-        <PropertyFilters
-          filterValues={filter}
-          defaultParams={DEFAULT_PARAMS}
-          updateFilter={updateFilter}
-          clearFilter={clearFilter}
-        />
+        <ErrorBoundary
+          fallbackRender={({ error }) => (
+            <div className="w-96 m-auto my-[5rem] p-2 text-red-600 text-center border-red-400 border-2">
+              <p className="text-2xl font-bold">Something Went Wrong</p>
+              <pre>Error Message: {getErrorMessage(error)}</pre>
+            </div>
+          )}
+        >
+          <PropertyFilters
+            filterValues={filter}
+            defaultParams={DEFAULT_PARAMS}
+            updateFilter={updateFilter}
+            clearFilter={clearFilter}
+          />
+        </ErrorBoundary>
         {loading && <LoadingCard />}
         {error && <ErrorCard error={errorMsg} />}
         {!loading && !error && properties?.results?.length > 0 && (
           <>
-            <div className="py-3 my-3 flex gap-5 justify-between">
-              <div>
-                Showing {properties?.offset + 1}-
-                {properties?.limit + properties?.offset < properties?.total
-                  ? properties?.limit + properties?.offset
-                  : properties?.total}{" "}
-                of {properties?.total} properties
+            <ErrorBoundary
+              fallbackRender={({ error }) => (
+                <div className="w-96 m-auto my-[5rem] p-2 text-red-600 text-center border-red-400 border-2">
+                  <p className="text-2xl font-bold">Something Went Wrong</p>
+                  <pre>Error Message: {getErrorMessage(error)}</pre>
+                </div>
+              )}
+            >
+              <div className="py-3 my-3 flex gap-5 justify-between">
+                <div>
+                  Showing {properties?.offset + 1}-
+                  {properties?.limit + properties?.offset < properties?.total
+                    ? properties?.limit + properties?.offset
+                    : properties?.total}{" "}
+                  of {properties?.total} properties
+                </div>
+                <div className="flex gap-2 items-center">
+                  <span>Sort: </span>
+                  <select
+                    name="sortBy"
+                    value={sort.sortBy}
+                    onChange={(event) => changeSortBy(event)}
+                    className="text-center text-blue-900 font-bold"
+                  >
+                    <option value="default">Default</option>
+                    <option value="price">Price</option>
+                    <option value="date-listed">Date Listed</option>
+                    <option value="square-footage">Square Footage</option>
+                    <option value="beds">Number of Beds</option>
+                  </select>
+                  <button
+                    onClick={changeSortOrder}
+                    className="text-white font-bold bg-blue-900 p-1 pt-0 pr-2 rounded-lg cursor-pointer"
+                  >
+                    &#8645;{" "}
+                    {sort.sortOrder === "asc" ? "Ascending" : "Descending"}
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2 items-center">
-                <span>Sort:{" "}</span>
-                <select
-                  name="sortBy"
-                  value={sort.sortBy}
-                  onChange={(event) => changeSortBy(event)}
-                  className="text-center text-blue-900 font-bold"
-                >
-                  <option value="default">Default</option>
-                  <option value="price">Price</option>
-                  <option value="date-listed">Date Listed</option>
-                  <option value="square-footage">Square Footage</option>
-                  <option value="beds">Number of Beds</option>
-                </select>
-                <button
-                  onClick={changeSortOrder}
-                  className="text-white font-bold bg-blue-900 p-1 pt-0 pr-2 rounded-lg cursor-pointer"
-                >
-                  &#8645;{" "}
-                  {sort.sortOrder === "asc" ? "Ascending" : "Descending"}
-                </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {properties?.results?.map((property) => (
+                  <PropertyCard key={property.ListingID} property={property} />
+                ))}
               </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {properties?.results?.map((property) => (
-                <PropertyCard key={property.ListingID} property={property} />
-              ))}
-            </div>
+            </ErrorBoundary>
           </>
         )}
 
@@ -166,13 +185,22 @@ export default function ListingsPage() {
             No properties found. Please adjust filter terms and try again.
           </div>
         )}
-        <Pagination
-          currentPage={currentPage}
-          itemsPerPage={LIMIT}
-          totalItems={properties?.total}
-          changePage={changePage}
-          loading={loading}
-        />
+        <ErrorBoundary
+          fallbackRender={({ error }) => (
+            <div className="w-96 m-auto my-[5rem] p-2 text-red-600 text-center border-red-400 border-2">
+              <p className="text-2xl font-bold">Something Went Wrong</p>
+              <pre>Error Message: {getErrorMessage(error)}</pre>
+            </div>
+          )}
+        >
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={LIMIT}
+            totalItems={properties?.total}
+            changePage={changePage}
+            loading={loading}
+          />
+        </ErrorBoundary>
       </div>
     </>
   );
