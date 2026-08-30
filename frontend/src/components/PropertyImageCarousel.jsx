@@ -1,17 +1,17 @@
 import { useState } from "react";
-// import placeholderImage from "../assets/placeholder.png";
 
 export default function PropertyImageCarousel({ imageArray }) {
   const counter = imageArray.length;
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // checks if the helper parsing function returned an empty array, and sets the photo array to the placeholder/error image if so
   const photos = counter > 0 ? imageArray : ["/placeholder.png"];
 
   function handleNext(event) {
     event.preventDefault();
     event.stopPropagation();
     setCurrentIndex((prevIndex) =>
-      prevIndex + 1 === counter ? 0 : prevIndex + 1,
+      prevIndex + 1 === counter ? 0 : prevIndex + 1,  // wraps the index around once it reaches the end of the photo array
     );
   }
 
@@ -19,10 +19,11 @@ export default function PropertyImageCarousel({ imageArray }) {
     event.preventDefault();
     event.stopPropagation();
     setCurrentIndex((prevIndex) =>
-      prevIndex - 1 < 0 ? counter - 1 : prevIndex - 1,
+      prevIndex - 1 < 0 ? counter - 1 : prevIndex - 1,  // wraps the index around once it reaches the beginning of the photo array
     );
   }
 
+  // swaps an image to the placeholder/error image if the original source link results in an error, e.g. a 404 HTTP error
   function handlePhotoError(event) {
     event.currentTarget.onerror = null;
     event.currentTarget.src = "/placeholder.png";
@@ -38,6 +39,11 @@ export default function PropertyImageCarousel({ imageArray }) {
         loading="lazy"
       />
       <div className="absolute bottom-0 right-0 m-1 px-1 pb-1 bg-black/50 rounded-lg text-white font-bold">
+        {/* 
+          converts index from a 0-based to a 1-based index for readability; 
+          also checks if counter is empty (an error occurred when parsing/fetching photos) and adds 1 so counter displays as
+          1/1 instead of 1/0
+        */}
         {currentIndex + 1} / {counter > 0 ? counter : counter + 1} photos
       </div>
       <button
@@ -47,6 +53,7 @@ export default function PropertyImageCarousel({ imageArray }) {
         }}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="-translate-x-[0.75px]"
           width="24px"
@@ -78,6 +85,7 @@ export default function PropertyImageCarousel({ imageArray }) {
         onClick={handleNext}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="translate-x-[0.75px]"
           width="24px"
@@ -107,6 +115,5 @@ export default function PropertyImageCarousel({ imageArray }) {
         </svg>
       </button>
     </div>
-    // Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5
   );
 }

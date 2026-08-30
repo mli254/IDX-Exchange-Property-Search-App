@@ -57,12 +57,15 @@ export default function PropertyDetailPage() {
 
   const property = propertyDetail?.results?.[0];
   const photos = helper.parsePhotos(property?.L_Photos);
-  const details = [];
-  const interiorFeatures = [];
-  const exteriorFeatures = [];
+  const details = [];           // corresponds to the blue fields at the top of the page
+  const interiorFeatures = [];  // corresponds to the "interior tab" in property details
+  const exteriorFeatures = [];  // corresponds to the "exterior tab" in property details
 
   if (property) {
-    // checking for property details like property type, # of levels/stories, year built, lot size, garage spaces
+    /*
+      checks for "property type" (e.g. Single Family Residence, Townhouse); 
+      if it doesn't exist, checks for the "property class", which is usually "Residential"
+    */
     if (property.L_Type_) {
       details.push({
         desc: "Property Type",
@@ -75,6 +78,10 @@ export default function PropertyDetailPage() {
       });
     }
 
+    /*
+      checks for a numerical value from the "StoriesTotal" field; otherwise checks for a string representation from
+      the levels field represented by "L_Keyword7"
+    */
     if (property.StoriesTotal) {
       details.push({
         desc: "Levels",
@@ -87,6 +94,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for the year built
     if (property.YearBuilt) {
       details.push({
         desc: "Year Built",
@@ -94,6 +102,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for lot size as represented by "L_Keyword1"
     if (property.L_Keyword1) {
       const lotSize = helper.formatNumber(parseInt(property.L_Keyword1));
       if (lotSize) {
@@ -111,6 +120,7 @@ export default function PropertyDetailPage() {
       }
     }
 
+    // checks for the number of garage parking spaces, represented by "L_Keyword5"
     if (property.L_Keyword5) {
       details.push({
         desc: "Parking",
@@ -118,6 +128,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks if the property is part of a senior community
     if (property.SeniorCommunityYN) {
       details.push({
         desc: "Community Type",
@@ -125,6 +136,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks if the property is newly constructed and previously unoccupied
     if (property.NewConstructionYN) {
       details.push({
         desc: "Status",
@@ -132,8 +144,11 @@ export default function PropertyDetailPage() {
       });
     }
 
-    // checking for interior property details like:
-    // heating/cooling, interior features, appliances, fireplaces, spas, room types, flooring type
+    /*
+      checks both if heating exists and the type of heating provided;
+      - sometimes HeatingYN = 1 but Heating is null, so there's a fallback "Included" description
+      - otherwise, Heating may be a single ite, (e.g. "Central") or have multiple items separated by commas (e.g. "Central,Forced")
+    */
     if (property.HeatingYN && property.HeatingYN > 0) {
       const heatingType = helper.parseCommaAndCamelCase(property.Heating);
       interiorFeatures.push({
@@ -142,6 +157,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for cooling details using similar logic to heating
     if (property.CoolingYN && property.CoolingYN > 0) {
       const coolingType = helper.parseCommaAndCamelCase(property.Cooling);
       interiorFeatures.push({
@@ -150,6 +166,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for interior features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.InteriorFeatures) {
       interiorFeatures.push({
         desc: "Interior Features",
@@ -157,6 +174,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for appliances; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.Appliances) {
       interiorFeatures.push({
         desc: "Appliances",
@@ -164,6 +182,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks if a fireplace exists, and if any details are provided; similar logic to cooling and heating
     if (property.FireplaceYN && property.FireplaceYN > 0) {
       const fireplaceFeatures = helper.parseCommaAndCamelCase(
         property.FireplaceFeatures,
@@ -181,6 +200,7 @@ export default function PropertyDetailPage() {
       }
     }
 
+    // checks if a property has a spa; similar logic to checking for fireplaces
     if (property.SpaYN && property.SpaYN > 0) {
       const spaFeatures = helper.parseCommaAndCamelCase(property.SpaFeatures);
       if (spaFeatures && spaFeatures[0] !== "None") {
@@ -196,6 +216,7 @@ export default function PropertyDetailPage() {
       }
     }
 
+    // checks for room types; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.RoomType) {
       interiorFeatures.push({
         desc: "Types of Rooms Available",
@@ -203,16 +224,15 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for flooring details; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.Flooring) {
       interiorFeatures.push({
         desc: "Flooring Type",
         value: helper.parseCommaAndCamelCase(property.Flooring),
       });
     }
-
-    // checking for exterior property details like:
-    // architectural style, patio features, water source, pool, view, community features, security features, lot features
-    // roof type, fencing, garage: attached, property: attached
+    
+    // checks for architectural style; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.ArchitecturalStyle) {
       exteriorFeatures.push({
         desc: "Architectural Style",
@@ -220,6 +240,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for patio/porch features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.PatioAndPorchFeatures) {
       exteriorFeatures.push({
         desc: "Patio and Porch",
@@ -227,6 +248,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for info on water sources; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.WaterSource) {
       exteriorFeatures.push({
         desc: "Water Source",
@@ -234,6 +256,16 @@ export default function PropertyDetailPage() {
       });
     }
 
+    /* 
+      checks if a pool exists, and if any details are provided;
+      for some properties, a pool may not be private, but pool details are still provided; the code handles the cases where:
+      1. private pool is marked true, pool features are provided, and string does not contain "None"
+        -> Pool Features are visible on page and "private" is added to the description if not already within the PoolFeatures field
+      2. private pool is marked false, but pool features are provided and string does not contain "None"
+        -> Pool Features are given the pool features from the SQL data directly
+      3. private pool is marked true, but pool features is null
+        -> Pool Features is listed with the only description being "Private"
+    */
     if (property.PoolPrivateYN || property.PoolFeatures) {
       if (property.PoolFeatures) {
         const poolFeatures = helper.parseCommaAndCamelCase(
@@ -256,6 +288,7 @@ export default function PropertyDetailPage() {
       }
     }
 
+    // checks if a view exists, and populates with any details provided; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.ViewYN && property.View && property.ViewYN > 0) {
       exteriorFeatures.push({
         desc: "View",
@@ -263,6 +296,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for community features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.CommunityFeatures) {
       exteriorFeatures.push({
         desc: "Communities",
@@ -270,6 +304,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for security features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.SecurityFeatures) {
       exteriorFeatures.push({
         desc: "Security Features",
@@ -277,6 +312,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for lot (i.e. backyard) features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.LotFeatures) {
       exteriorFeatures.push({
         desc: "Lot Features",
@@ -284,6 +320,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for roof features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.Roof) {
       exteriorFeatures.push({
         desc: "Roofing",
@@ -291,6 +328,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks for fencing features; fields are typically stored in the format "CamelCase,CamelCase,..."
     if (property.Fencing) {
       exteriorFeatures.push({
         desc: "Fencing",
@@ -298,6 +336,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks if a garage is attached to the property 
     if (property.AttachedGarageYN && property.AttachedGarageYN > 0) {
       exteriorFeatures.push({
         desc: "Garage",
@@ -305,6 +344,7 @@ export default function PropertyDetailPage() {
       });
     }
 
+    // checks if a property is attached to another property unaffiliated with the property's lease
     if (property.PropertyAttachedYN && property.PropertyAttachedYN > 0) {
       exteriorFeatures.push({
         desc: "Property",
@@ -365,7 +405,7 @@ export default function PropertyDetailPage() {
             </p>
           </div>
           <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-1 px-5 pt-5 pb-5 rounded-lg bg-white border-2 border-gray-200">
-            <h2 className="font-[700] text-2xl mt-1 mb-3">About</h2>
+            <h2 className="font-bold text-2xl mt-1 mb-3">About</h2>
             <p>{property.L_Remarks || "Description unavailable."}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
               {details.map((detail, index) => (

@@ -1,8 +1,9 @@
 const fetchProperties = async (params) => {
   /*
         params = {
-            limit       offset      city    zipcode
-            minPrice    maxPrice    beds    baths
+            limit   offset    sortBy    sortOrder
+            city    zipcode   minPrice  maxPrice    
+            beds    baths
         }
 
         url format:
@@ -10,6 +11,7 @@ const fetchProperties = async (params) => {
     */
   const queries = [];
 
+  // programmatically builds the query string based on which params are present
   if (params && params.limit) {
     queries.push(`limit=${params.limit}`);
   }
@@ -41,6 +43,8 @@ const fetchProperties = async (params) => {
     queries.push(`baths=${params.baths}`);
   }
 
+  // joins the queries with & to ensure there are no extra &'s at the beginning or end; 
+  // if there are no query params passed in, uses the endpoint with no query params specified
   const queryString = queries.length
     ? "/api/properties/?" + queries.join("&")
     : "/api/properties";
@@ -52,15 +56,16 @@ const fetchProperties = async (params) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error(error);
     return {
+      // follows the same template as the backend so that there is an "error" field for the frontend to parse
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };
@@ -73,14 +78,14 @@ const fetchPropertyDetail = async (id) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
+  } catch (error) {
     return {
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };
@@ -93,14 +98,14 @@ const fetchPropertyOpenhouses = async (id) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
+  } catch (error) {
     return {
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };

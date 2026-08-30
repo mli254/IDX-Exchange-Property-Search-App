@@ -10,11 +10,9 @@ function paramValidation (param, label, min=null, max=null) {
     if (!parsedParam && parsedParam !== 0) {
         return { error: `Please ensure ${label} parameter is a numeric whole number.` };
     }
-
     if (min !== null && parsedParam < min) {
         return { error: `Please ensure ${label} parameter is greater than ${min}` };
     }
-
     if (max !== null && parsedParam > max) {
         return { error: `Please ensure ${label} parameter is less than ${max}` };
     }
@@ -22,13 +20,19 @@ function paramValidation (param, label, min=null, max=null) {
     return { parsedParam };
 }
 
+/*
+    API endpoint: /api/properties
+    can accept optional query params:
+    limit, offset, sortBy, sortOrder, city, zipcode, minPrice, maxPrice, beds, baths
+*/
 router.get('/', async (req, res) => {
     // est. default values
     let limit = 20;
     let offset = 0;
     let sortBy = "L_ListingID"
     let sortOrder = "ASC"
-    // possible sortBy values: price, date listed, square footage, or beds.
+
+    // a whitelist for possible sortBy values: price, date-listed, square-footage, or beds.
     const sortMap = {
         "default": "L_ListingID",
         "price": "L_SystemPrice",
@@ -149,11 +153,13 @@ router.get('/', async (req, res) => {
         // want to count the full number/amount of rows returned for a given query
         const [count] = await pool.query(`SELECT COUNT(*) AS total FROM rets_property ${wherequery};`, values);
         
-        // for cleanliness of viewing, only selecting the rows we're filtering instead of the full row; 
-        // this can be modified in the future
-        // ORDER BY can be controlled with query params, but L_ListingID is always a secondary parameter to 
-        // ensure the results are consistent, especially if an ORDER BY field may be null 
-        // 'AS' keyword allows customization of display names for fields in order to make output more readable 
+        /* 
+            For cleanliness of viewing, only selecting the rows we're using instead of all fields; 
+                this can be modified in the future
+            ORDER BY can be controlled with query params, but L_ListingID is always a secondary parameter to 
+                ensure the results are consistent, especially if an ORDER BY field may be null 
+            'AS' keyword allows customization of display names for fields in order to make output more readable 
+        */
         const [result] = await pool.query(
             `SELECT L_ListingID AS ListingID, L_City AS City, L_State AS State, L_Address AS Address, L_Zip AS Zipcode, L_SystemPrice AS Price, L_Keyword2 AS Beds, LM_Dec_3 AS Baths, LM_Int2_3 AS SQFT, LivingAreaUnits, L_Photos as Photos 
             FROM rets_property ${wherequery} ORDER BY ${sortBy} ${sortOrder}, L_ListingID ASC
@@ -178,17 +184,20 @@ router.get('/', async (req, res) => {
     }    
 });
 
+/* API endpoint: /api/properties/:id/openhouses */
 router.get('/:id/openhouses', async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ status: "bad request", error: "Please include a listing ID." });
     }
 
-    // Checking if ID is malformed, based off the current smallest/largest IDs:
-    //      smallest:   421653666   (9 digits)
-    //      largest:    1174733202  (10 digits)
-    // ERROR: There is an ID that exists in rets_openhouse but not rets_property; unsure if this is the specific ID
-    //      as mentioned in the PDF, but making note of it:
-    //      id:         552066853
+    /* 
+        Checking if ID is malformed, based off the current smallest/largest IDs:
+            smallest:   421653666   (9 digits)
+            largest:    1174733202  (10 digits)
+        ERROR: There is an ID that exists in rets_openhouse but not rets_property; unsure if this is the specific ID
+            as mentioned in the PDF, but making note of it:
+            id:         552066853
+    */
     const parsedId = parseInt(req.params.id);
 
     if (isNaN(parsedId)) {
@@ -200,7 +209,6 @@ router.get('/:id/openhouses', async (req, res) => {
 
     try {
         // first querying rets_property to see if ID exists within the larger database
-        // NOTE: id = 552066853 exists in rets_openhouse, but not rets_property
         const [result] = await pool.query(
             `SELECT L_ListingID FROM rets_property WHERE L_ListingID = ?`, req.params.id);
         if (result.length < 1) {
@@ -220,6 +228,7 @@ router.get('/:id/openhouses', async (req, res) => {
     }
 });
 
+/* API endpoint: /api/properties/:id */
 router.get('/:id', async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({ status: "bad request", error: "Please include a listing ID." });

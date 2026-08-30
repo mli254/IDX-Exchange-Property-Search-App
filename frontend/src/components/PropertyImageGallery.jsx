@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-// import placeholderImage from "../assets/placeholder.png";
 import Lightbox from "./Lightbox";
 
 export default function PropertyImageGallery({ imageArray }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxVisible, setLightboxVisible] = useState(false);
 
+  // checks if the helper parsing function returned an empty array, and sets the photo array to the placeholder/error image if so
   const photos = imageArray.length > 0 ? imageArray : ["/placeholder.png"];
 
+  // swaps an image to the placeholder/error image if the original source link results in an error, e.g. a 404 HTTP error
   function handlePhotoError(event) {
     event.currentTarget.onerror = null;
     event.currentTarget.src = "/placeholder.png";
@@ -19,7 +20,7 @@ export default function PropertyImageGallery({ imageArray }) {
       behavior: "smooth",
       block: "nearest",
       inline: "center",
-      container: "nearest"
+      container: "nearest",
     });
   }
 

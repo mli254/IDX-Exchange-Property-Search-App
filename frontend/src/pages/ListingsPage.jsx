@@ -7,6 +7,7 @@ import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
 import Pagination from "../components/Pagination";
 
+// removes any params with empty values and trims string params
 function cleanParams(filter) {
   for (let [key, value] of Object.entries(filter)) {
     if (!value) {
@@ -41,23 +42,22 @@ export default function ListingsPage() {
   };
 
   const [filter, setFilter] = useState(DEFAULT_PARAMS);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [itemsPerPage, setItemsPerPage] = useState(LIMIT);
-  const [offsetPerPage, setOffsetPerPage] = useState(OFFSET);
   const [sort, setSort] = useState(DEFAULT_SORT);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offsetPerPage, setOffsetPerPage] = useState(OFFSET);
 
   function updateFilter(tempFilter) {
     setFilter(tempFilter);
+    setSort(DEFAULT_SORT);
     setOffsetPerPage(OFFSET);
     setCurrentPage(1);
-    setSort(DEFAULT_SORT);
   }
 
   function clearFilter() {
     setFilter(DEFAULT_PARAMS);
+    setSort(DEFAULT_SORT);
     setOffsetPerPage(OFFSET);
     setCurrentPage(1);
-    setSort(DEFAULT_SORT);
   }
 
   function changePage(pageNumber) {
@@ -76,7 +76,6 @@ export default function ListingsPage() {
 
   function changeSortOrder() {
     const newOrder = sort.sortOrder === "asc" ? "desc" : "asc";
-    console.log("test");
     setSort((prevState) => ({
       ...prevState,
       sortOrder: newOrder,
@@ -105,7 +104,7 @@ export default function ListingsPage() {
     };
 
     loadProperties();
-  }, [filter, offsetPerPage, sort]);
+  }, [offsetPerPage, sort, filter]);
 
   return (
     <>
@@ -142,6 +141,12 @@ export default function ListingsPage() {
             >
               <div className="py-3 my-3 flex gap-5 justify-between">
                 <div>
+                  {/* 
+                    Shows current position in listings:
+                    - starts at listing "1", so converts offset from being 0-based using "offset + 1"
+                    - ends at either the limit + the current offset, or the total amount of properties if there
+                      are less than limit elements on a page
+                  */}
                   Showing {properties?.offset + 1}-
                   {properties?.limit + properties?.offset < properties?.total
                     ? properties?.limit + properties?.offset

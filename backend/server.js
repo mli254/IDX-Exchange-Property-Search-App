@@ -1,5 +1,3 @@
-import dotenv from "dotenv/config"; // needs to be the very first import
-import mysql from 'mysql2/promise';
 import express from 'express';
 import cors from 'cors';
 import { pool } from "./db.js";
@@ -16,6 +14,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+// employs a simple query to check the status of the database connection
 app.get('/api/health', async (req, res) => {
   try {
     await pool.query("SELECT 1");
@@ -39,6 +38,7 @@ app.get('/api/health', async (req, res) => {
 
 app.use("/api/properties", propertiesRouter);
 
+// print statement to check that server is successfully running
 app.listen(process.env.SERVER_PORT || 5000, () => {
   console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 });
