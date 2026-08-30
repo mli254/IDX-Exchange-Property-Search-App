@@ -365,7 +365,7 @@ export default function PropertyDetailPage() {
             </p>
           </div>
           <div className="w-full sm:w-[90%] md:w-[60%] m-auto my-1 px-5 pt-5 pb-5 rounded-lg bg-white border-2 border-gray-200">
-            <h2 className="font-[700] text-2xl mt-1 mb-3">About</h2>
+            <h2 className="font-bold text-2xl mt-1 mb-3">About</h2>
             <p>{property.L_Remarks || "Description unavailable."}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
               {details.map((detail, index) => (

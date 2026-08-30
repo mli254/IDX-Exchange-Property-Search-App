@@ -52,15 +52,15 @@ const fetchProperties = async (params) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error(error);
     return {
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };
@@ -73,14 +73,14 @@ const fetchPropertyDetail = async (id) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
+  } catch (error) {
     return {
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };
@@ -93,14 +93,14 @@ const fetchPropertyOpenhouses = async (id) => {
       return await response.json();
     } else {
       const errResponse = await response.json();
-      console.log(errResponse);
+      console.error(errResponse);
       return errResponse;
     }
-  } catch (e) {
+  } catch (error) {
     return {
       status: "internal server error",
       error: "Failed to reach backend.",
-      message: e,
+      message: error,
     };
   }
 };

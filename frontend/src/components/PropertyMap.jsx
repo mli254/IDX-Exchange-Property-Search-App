@@ -10,7 +10,6 @@ export default function PropertyMap({ lat, long }) {
         className="rounded-lg m-auto"
         width="100%"
         height={250}
-        frameBorder={0}
         referrerPolicy="strict-origin-when-cross-origin"
         src={embedURL}
         allowFullScreen

@@ -1,5 +1,3 @@
-import express from 'express';
-
 const logger = (req, res, next) => {
     const start = process.hrtime();
 
@@ -13,11 +11,9 @@ const logger = (req, res, next) => {
             timestamp: new Date().toISOString(),
             duration: milliseconds + " ms"
         }
-
         console.log(log);
     });
     next();
-
 };
 
 export default logger;

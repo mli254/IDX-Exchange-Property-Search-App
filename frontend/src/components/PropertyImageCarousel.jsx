@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import placeholderImage from "../assets/placeholder.png";
 
 export default function PropertyImageCarousel({ imageArray }) {
   const counter = imageArray.length;
@@ -47,6 +46,7 @@ export default function PropertyImageCarousel({ imageArray }) {
         }}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="-translate-x-[0.75px]"
           width="24px"
@@ -78,6 +78,7 @@ export default function PropertyImageCarousel({ imageArray }) {
         onClick={handleNext}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="translate-x-[0.75px]"
           width="24px"
@@ -107,6 +108,5 @@ export default function PropertyImageCarousel({ imageArray }) {
         </svg>
       </button>
     </div>
-    // Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5
   );
 }

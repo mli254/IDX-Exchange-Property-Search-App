@@ -1,5 +1,3 @@
-import dotenv from "dotenv/config"; // needs to be the very first import
-import mysql from 'mysql2/promise';
 import express from 'express';
 import cors from 'cors';
 import { pool } from "./db.js";
