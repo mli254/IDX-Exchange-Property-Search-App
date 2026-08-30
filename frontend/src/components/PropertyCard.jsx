@@ -11,6 +11,10 @@ export default function PropertyCard({ property }) {
         <PropertyImageCarousel imageArray={photoArray} />
         <div className="flex flex-col p-2 m-2">
           <h2 className="pb-2 font-bold text-2xl">
+          {/* 
+            Since multiple fields have a chance to be null, a fallback string is provided using 
+            the "or" operator (||) or a dedicated parsing function
+          */}
             {helper.formatPrice(property.Price) || "Price: N/A"}
           </h2>
           <p>
