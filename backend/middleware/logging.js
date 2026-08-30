@@ -3,7 +3,7 @@ const logger = (req, res, next) => {
 
     res.once("finish", () => {
         const [seconds, nanoseconds] = process.hrtime(start);
-        const milliseconds = (seconds * 1e3) + (nanoseconds * 1e-6);
+        const milliseconds = (seconds * 1e3) + (nanoseconds * 1e-6); // converts time elapsed to milliseconds
         const log = {
             method: req.method,
             url: req.originalUrl, 

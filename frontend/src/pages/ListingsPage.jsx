@@ -7,6 +7,7 @@ import PropertyCard from "../components/PropertyCard";
 import PropertyFilters from "../components/PropertyFilters";
 import Pagination from "../components/Pagination";
 
+// removes any params with empty values and trims string params
 function cleanParams(filter) {
   for (let [key, value] of Object.entries(filter)) {
     if (!value) {
@@ -140,6 +141,12 @@ export default function ListingsPage() {
             >
               <div className="py-3 my-3 flex gap-5 justify-between">
                 <div>
+                  {/* 
+                    Shows current position in listings:
+                    - starts at listing "1", so converts offset from being 0-based using "offset + 1"
+                    - ends at either the limit + the current offset, or the total amount of properties if there
+                      are less than limit elements on a page
+                  */}
                   Showing {properties?.offset + 1}-
                   {properties?.limit + properties?.offset < properties?.total
                     ? properties?.limit + properties?.offset
