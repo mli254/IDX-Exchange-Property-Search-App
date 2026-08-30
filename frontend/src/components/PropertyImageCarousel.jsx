@@ -1,11 +1,11 @@
 import { useState } from "react";
-import placeholderImage from "../assets/placeholder.png";
+// import placeholderImage from "../assets/placeholder.png";
 
 export default function PropertyImageCarousel({ imageArray }) {
   const counter = imageArray.length;
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const photos = counter > 0 ? imageArray : [placeholderImage];
+  const photos = counter > 0 ? imageArray : ["/placeholder.png"];
 
   function handleNext(event) {
     event.preventDefault();
@@ -25,7 +25,7 @@ export default function PropertyImageCarousel({ imageArray }) {
 
   function handlePhotoError(event) {
     event.currentTarget.onerror = null;
-    event.currentTarget.src = placeholderImage;
+    event.currentTarget.src = "/placeholder.png";
   }
 
   return (

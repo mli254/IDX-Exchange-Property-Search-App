@@ -1,11 +1,10 @@
 import { useState } from "react";
-import placeholderImage from "../assets/placeholder.png";
 
 export default function Lightbox({ imageArray, startingIndex }) {
   const counter = imageArray.length;
   const [currentIndex, setCurrentIndex] = useState(startingIndex);
 
-  const photos = counter > 0 ? imageArray : [placeholderImage];
+  const photos = counter > 0 ? imageArray : ["/placeholder.png"];
 
   function handleNext(event) {
     event.preventDefault();
@@ -25,7 +24,7 @@ export default function Lightbox({ imageArray, startingIndex }) {
 
   function handlePhotoError(event) {
     event.currentTarget.onerror = null;
-    event.currentTarget.src = placeholderImage;
+    event.currentTarget.src = "/placeholder.png";
   }
 
   return (
