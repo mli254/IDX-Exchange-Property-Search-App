@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import placeholderImage from "../assets/placeholder.png";
 import Lightbox from "./Lightbox";
 
 export default function PropertyImageGallery({ imageArray }) {
@@ -19,7 +18,7 @@ export default function PropertyImageGallery({ imageArray }) {
       behavior: "smooth",
       block: "nearest",
       inline: "center",
-      container: "nearest"
+      container: "nearest",
     });
   }
 

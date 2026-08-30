@@ -18,7 +18,7 @@ function parsePhotos(photosJSON) {
         photo.trim() !== "",
     );
   } catch {
-    console.log("unable to parse JSON string");
+    console.error("unable to parse JSON string");
     return [];
   }
 }

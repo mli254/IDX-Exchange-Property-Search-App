@@ -141,7 +141,6 @@ export default function PropertyFilters({
             <button
               type="submit"
               className="transition duration-200 mx-2 px-3 py-1 font-bold text-white bg-blue-900 rounded-lg hover:bg-sky-700"
-              // "font-bold text-white bg-blue-900 rounded-lg px-2 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-sky-700"
             >
               Submit
             </button>

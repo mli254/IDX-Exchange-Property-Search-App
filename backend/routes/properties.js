@@ -10,11 +10,9 @@ function paramValidation (param, label, min=null, max=null) {
     if (!parsedParam && parsedParam !== 0) {
         return { error: `Please ensure ${label} parameter is a numeric whole number.` };
     }
-
     if (min !== null && parsedParam < min) {
         return { error: `Please ensure ${label} parameter is greater than ${min}` };
     }
-
     if (max !== null && parsedParam > max) {
         return { error: `Please ensure ${label} parameter is less than ${max}` };
     }
@@ -28,7 +26,8 @@ router.get('/', async (req, res) => {
     let offset = 0;
     let sortBy = "L_ListingID"
     let sortOrder = "ASC"
-    // possible sortBy values: price, date listed, square footage, or beds.
+
+    // a whitelist for possible sortBy values: price, date-listed, square-footage, or beds.
     const sortMap = {
         "default": "L_ListingID",
         "price": "L_SystemPrice",
@@ -149,7 +148,7 @@ router.get('/', async (req, res) => {
         // want to count the full number/amount of rows returned for a given query
         const [count] = await pool.query(`SELECT COUNT(*) AS total FROM rets_property ${wherequery};`, values);
         
-        // for cleanliness of viewing, only selecting the rows we're filtering instead of the full row; 
+        // for cleanliness of viewing, only selecting the rows we're using instead of all fields; 
         // this can be modified in the future
         // ORDER BY can be controlled with query params, but L_ListingID is always a secondary parameter to 
         // ensure the results are consistent, especially if an ORDER BY field may be null 

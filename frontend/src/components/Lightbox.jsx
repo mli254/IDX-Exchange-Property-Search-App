@@ -36,6 +36,7 @@ export default function Lightbox({ imageArray, startingIndex }) {
         }}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="-translate-x-[0.75px]"
           width="24px"
@@ -81,6 +82,7 @@ export default function Lightbox({ imageArray, startingIndex }) {
         onClick={handleNext}
         disabled={counter < 2}
       >
+        {/* Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5*/}
         <svg
           className="translate-x-[0.75px]"
           width="24px"
@@ -110,6 +112,5 @@ export default function Lightbox({ imageArray, startingIndex }) {
         </svg>
       </button>
     </div>
-    // Arrow SVGs from: https://www.svgrepo.com/svg/520523/arrow-left-5
   );
 }
