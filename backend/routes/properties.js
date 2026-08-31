@@ -5,7 +5,7 @@ const router = express.Router();
 
 // inspired by Ray, refactored my repeated error handling code into a single function
 function paramValidation (param, label, min=null, max=null) {
-    let parsedParam = parseInt(param);
+    const parsedParam = parseInt(param);
 
     if (!parsedParam && parsedParam !== 0) {
         return { error: `Please ensure ${label} parameter is a numeric whole number.` };
@@ -29,8 +29,8 @@ router.get('/', async (req, res) => {
     // est. default values
     let limit = 20;
     let offset = 0;
-    let sortBy = "L_ListingID"
-    let sortOrder = "ASC"
+    let sortBy = "L_ListingID";
+    let sortOrder = "ASC";
 
     // a whitelist for possible sortBy values: price, date-listed, square-footage, or beds.
     const sortMap = {
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
         "date-listed": "ListingContractDate",
         "square-footage": "LM_Int2_3",
         "beds": "L_Keyword2"
-    }
+    };
 
     // incrementally append new param values as the conditions are handled below
     const conditions = [];
@@ -85,7 +85,7 @@ router.get('/', async (req, res) => {
         }
 
         if (req.query.sortOrder === "desc") {
-            sortOrder = "DESC"
+            sortOrder = "DESC";
         }
     }
 
