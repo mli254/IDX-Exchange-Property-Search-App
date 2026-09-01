@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { pool } from "./db.js";
 import logger from "./middleware/logging.js";
-import propertiesRouter from "./routes/properties.js"
+import propertiesRouter from "./routes/properties.js";
 
 const app = express();
 

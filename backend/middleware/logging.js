@@ -10,7 +10,7 @@ const logger = (req, res, next) => {
             status: res.statusCode,
             timestamp: new Date().toISOString(),
             duration: milliseconds + " ms"
-        }
+        };
         console.log(log);
     });
     next();
