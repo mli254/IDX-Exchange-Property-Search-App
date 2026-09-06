@@ -142,7 +142,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(pool.query.mock.calls[1][0]).toContain("ORDER BY L_SystemPrice DESC");
         });
 
-        test("Error response when limit query param is less than 1", async () => {
+        test("400 error response when limit query param is less than 1", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -152,7 +152,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure limit parameter is greater than 1");
         });
 
-        test("Error response when limit query param is greater than 100", async () => {
+        test("400 error response when limit query param is greater than 100", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -162,7 +162,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure limit parameter is less than 100");
         });
 
-        test("Error response if limit is non-numeric", async () => {
+        test("400 error response if limit is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -172,7 +172,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure limit parameter is a numeric whole number.");
         });
 
-        test("Error response when offset query param is negative", async () => {
+        test("400 error response when offset query param is negative", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -182,7 +182,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure offset parameter is greater than 0");
         });
 
-        test("Error response if offset is non-numeric", async () => {
+        test("400 error response if offset is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -192,7 +192,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure offset parameter is a numeric whole number.");
         });
 
-        test("Error response when sortBy query param is not whitelisted", async () => {
+        test("400 error response when sortBy query param is not whitelisted", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -202,7 +202,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("invalid is not a valid parameter. For sorting, please choose one of: default, price, date-listed, square-footage, or beds.");
         });
 
-        test("Error response when minPrice query param is negative", async () => {
+        test("400 error response when minPrice query param is negative", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -212,7 +212,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure minPrice parameter is greater than 0");
         });      
 
-        test("Error response if minPrice is non-numeric", async () => {
+        test("400 error response if minPrice is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -222,7 +222,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure minPrice parameter is a numeric whole number.");
         });        
         
-        test("Error response when maxPrice query param is negative", async () => {
+        test("400 error response when maxPrice query param is negative", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -232,7 +232,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure maxPrice parameter is greater than 0");
         }); 
 
-        test("Error response if maxPrice is non-numeric", async () => {
+        test("400 error response if maxPrice is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -242,7 +242,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure maxPrice parameter is a numeric whole number.");
         });
 
-        test("Error response when beds query param is negative", async () => {
+        test("400 error response when beds query param is negative", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -252,7 +252,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure beds parameter is greater than 0");
         }); 
 
-        test("Error response if beds is non-numeric", async () => {
+        test("400 error response if beds is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -262,7 +262,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure beds parameter is a numeric whole number.");
         });
 
-        test("Error response when baths query param is negative", async () => {
+        test("400 error response when baths query param is negative", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -272,7 +272,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure baths parameter is greater than 0");
         }); 
 
-        test("Error response if baths is non-numeric", async () => {
+        test("400 error response if baths is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[{ total: 53122 }]]);
             pool.query.mockResolvedValueOnce([[mockProperty]]);
 
@@ -282,11 +282,10 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure baths parameter is a numeric whole number.");
         });
 
-        test("Error response when database query fails", async () => {
+        test("500 error response when database query fails", async () => {
             pool.query.mockRejectedValue(new Error("Database Connection Refused"));
 
             const response = await request(app).get('/api/properties');
-
             expect(response.status).toBe(500);
             expect(response.body.status).toBe("internal server error");
             expect(response.body.error).toBe("Unable to connect to database.");
@@ -304,7 +303,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.results?.[0].L_City).toBe("Blythe");
         });
 
-        test("Error response when specified id param is non-numeric", async () => {
+        test("400 error response when specified id param is non-numeric", async () => {
             pool.query.mockResolvedValueOnce([[mockPropertyOriginalFieldNames]]);
 
             const response = await  request(app).get('/api/properties/invalid');
@@ -313,7 +312,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure listing ID is numeric.");
         });
 
-        test("Error response when id param is less than 100000000", async () => {
+        test("400 error response when id param is less than 100000000", async () => {
             pool.query.mockResolvedValueOnce([[mockPropertyOriginalFieldNames]]);
 
             const response = await  request(app).get('/api/properties/1');
@@ -322,7 +321,7 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("Please ensure listing ID is between 100000000 and 9999999999.");
         });
 
-        test("Error response when id param is greater than 9999999999", async () => {
+        test("400 error response when id param is greater than 9999999999", async () => {
             pool.query.mockResolvedValueOnce([[mockPropertyOriginalFieldNames]]);
 
             const response = await  request(app).get('/api/properties/19999999999');
@@ -340,11 +339,10 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("No listing was found for ID 100000000.");
         });
 
-        test("Error response when database query fails", async () => {
+        test("500 error response when database query fails", async () => {
             pool.query.mockRejectedValue(new Error("Database Connection Refused"));
 
             const response = await request(app).get('/api/properties/1001717885');
-
             expect(response.status).toBe(500);
             expect(response.body.status).toBe("internal server error");
             expect(response.body.error).toBe("Unable to connect to database.");
@@ -383,11 +381,10 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.error).toBe("No listing was found for ID 100000000.");
         });
 
-        test("Error response when database query fails", async () => {
+        test("500 error response when database query fails", async () => {
             pool.query.mockRejectedValue(new Error("Database Connection Refused"));
 
             const response = await request(app).get('/api/properties/1174690153/openhouses');
-
             expect(response.status).toBe(500);
             expect(response.body.status).toBe("internal server error");
             expect(response.body.error).toBe("Unable to connect to database.");
