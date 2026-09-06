@@ -281,6 +281,16 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.status).toBe("bad request");
             expect(response.body.error).toBe("Please ensure baths parameter is a numeric whole number.");
         });
+
+        test("Error response when database query fails", async () => {
+            pool.query.mockRejectedValue(new Error("Database Connection Refused"));
+
+            const response = await request(app).get('/api/properties');
+
+            expect(response.status).toBe(500);
+            expect(response.body.status).toBe("internal server error");
+            expect(response.body.error).toBe("Unable to connect to database.");
+        });
     });
 
     describe("Testing /api/properties/:id", () => {
@@ -329,6 +339,16 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.body.status).toBe("not found");
             expect(response.body.error).toBe("No listing was found for ID 100000000.");
         });
+
+        test("Error response when database query fails", async () => {
+            pool.query.mockRejectedValue(new Error("Database Connection Refused"));
+
+            const response = await request(app).get('/api/properties/1001717885');
+
+            expect(response.status).toBe(500);
+            expect(response.body.status).toBe("internal server error");
+            expect(response.body.error).toBe("Unable to connect to database.");
+        });
     });
 
     describe("Testing /api/properties/:id/openhouses", () => {
@@ -361,6 +381,16 @@ describe("Testing /api/properties/ endpoints from properties.js", () => {
             expect(response.status).toBe(404);
             expect(response.body.status).toBe("not found");
             expect(response.body.error).toBe("No listing was found for ID 100000000.");
+        });
+
+        test("Error response when database query fails", async () => {
+            pool.query.mockRejectedValue(new Error("Database Connection Refused"));
+
+            const response = await request(app).get('/api/properties/1174690153/openhouses');
+
+            expect(response.status).toBe(500);
+            expect(response.body.status).toBe("internal server error");
+            expect(response.body.error).toBe("Unable to connect to database.");
         });
     });
 });
