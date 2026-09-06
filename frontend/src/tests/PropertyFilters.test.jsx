@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
 import PropertyFilters from '../components/PropertyFilters';
@@ -11,6 +11,10 @@ const DEFAULT_PARAMS = {
     beds: "",
     baths: "",
   };
+
+afterEach(() => {
+    vi.clearAllMocks();
+});
 
 describe("PropertyFilters renders properly", () => {
     test("Renders PropertyCard component", () => {
