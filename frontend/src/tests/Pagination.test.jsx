@@ -1,10 +1,10 @@
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Pagination from "../components/Pagination"
+import Pagination from "../components/Pagination";
 
 afterEach(() => {
     vi.clearAllMocks();
-})
+});
 
 describe("Pagination renders properly", () => {
     const changePage = vi.fn( (pageNumber) => {
