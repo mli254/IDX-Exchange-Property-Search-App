@@ -2,12 +2,16 @@
 ## Description
 A property search application created for the IDX Exchange internship. Using real MLS data, the application displays multiple property listings via a grid of card elements. Users can filter the properties by city name, zipcode, minimum price, maximum price, number of beds, and number of baths. Clicking on a card will navigate to a separate page that provides more detailed information about the specific property, such as interior features, room types, and heating/cooling information. 
 
+### Screenshots
+![Photo of the home page.](/frontend/public/ListingPageScreenshot.png)
+![Photo of property detail page.](/frontend/public/PropertyDetailPageScreenshot.png)
+
 ### Tech Stack:
 - Backend
   - Node.js (ver. 24.16.0)
   - Express.js (ver. 5.2.1)
 - Frontend
-  - React (ver. 19.2.7)
+  - React (ver. 19.2.8)
   - TailwindCSS (ver. 4.3.3)
 - Database
   - MySQL 8 (Docker Container)
@@ -37,6 +41,24 @@ $ mysql -uroot -p
 ```
 The `-p` should prompt the database's password, after which users can enter SQL commands into the bash shell.
 
+### `.env` File Setup
+To manage local variables, such as a username and password for the database, the creation of two `.env` files will be necessary:
+
+In the root the `backend/` folder, create a `.env` file and write:
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=[password_here]
+DB_NAME=rets
+DB_PORT=3306
+SERVER_PORT=5000
+```
+
+In the root of the `frontend/` folder, create a `.env` file and write:
+```
+VITE_REACT_APP_GOOGLE_MAPS_API_KEY=[API_key_here]
+```
+
 ### NPM / Node.js Setup
 Node.js is used for the backend, and along with it `npm` as a package manager. If creating the project from scratch, first create a `backend` folder, and then run:
 
@@ -45,22 +67,35 @@ npm init -y
 npm install [dependency_name]
 ```
 
-Otherwise, if forking the repository, the following command will download all dependencies:
-
+Current dependencies can be installed using:
 ```bash
-cd backend
-npm install
+npm install [dependency_name]
+```
+These include:
+- cors
+    - provides security for cross-origin requests
+- dotenv
+    - used to store environment variables such as DB username/password in a single `.env` file. The `.env` file is not committed to GitHub.
+- express
+    - the framework used to define the backend routes
+- mysql2/promise
+    - able to establish `async` connections to a MySQL database 
+---
+Dependencies that will only be used during development (e.g. testing frameworks + linters) can be installed using:
+```bash
+npm install [dependency_name] --save-dev
 ```
 
 Currently, these include:
 - nodemon 
     - allows use of `npm run dev`, which auto-restarts server on file changes
-- mysql2/promise
-    - able to establish `async` connections to a MySQL database 
-- dotenv
-    - used to store environment variables such as DB username/password in a single `.env` file. The `.env` file is not committed to GitHub.
-- cors
-    - provides security for cross-origin requests
+- eslint 
+    - a linter that helps programmatically enforce code quality, such as consistent use of semicolons
+- supertest
+    - test framework for HTTP requests
+- vitest
+    - testing framework that allows for mocking and various assertion types
+
 
 ### React / Vite Setup
 React is used for the frontend, created via Vite and with `npm` as a package manager as well. If creating the project from scratch, run:
@@ -69,6 +104,33 @@ React is used for the frontend, created via Vite and with `npm` as a package man
 npm create vite@latest frontend 
 ```
 With `frontend` becoming the folder that holds your React app. From there, the Command Line will present several configuration options. Select `React` and then `JavaScript`.
+
+Current dependencies can be installed using:
+```bash
+npm install [dependency_name]
+```
+These dependencies are:
+- tailwindcss
+  - a CSS styling framework
+  - requires `import tailwindcss from '@tailwindcss/vite'` inside `vite.config.js`
+  - requires adding `tailwindcss(),` to `plugins` inside `vite.config.js`
+  - for more detailed setup instructions, visit https://tailwindcss.com/docs/installation/using-vite
+- date-fns
+    - a library that contains helper functions for formatting ISO datestrings
+- react-router
+    - a library in React that allows for navigation between React components using programmer-defined URL paths
+
+Some dependencies are used only during development, and are installed using:
+```bash
+npm install [dependency_name] --save-dev
+```
+
+These dependencies are:
+- testing-library
+    - encompasses `testing-library/dom`, `testing-library/jest-dom`, `testing-library/react`, and `testing-library/user-event`
+    - used to render React components in unit tests and simulate user events like button clicking
+- vitest
+    - a testing framework that allows for mocking and various assertion types
 
 ### SQL Setup
 To speed up database queries, indexes are created on commonly accessed columns:
@@ -79,6 +141,8 @@ CREATE INDEX idx_price ON rets_property (L_SystemPrice);
 CREATE INDEX idx_beds ON rets_property (L_Keyword2);
 CREATE INDEX idx_baths ON rets_property (LM_Dec_3);
 CREATE INDEX idx_city_price ON rets_property ((LOWER(TRIM(L_City))), L_SystemPrice);
+CREATE INDEX idx_zip_baths ON rets_property (L_Zip, LM_Dec_3);
+CREATE INDEX idx_listingdate ON rets_property (ListingContractDate);
 ```
 ### `EXPLAIN` for SQL query performance
 The `EXPLAIN` or `EXPLAIN ANALYZE` commands can be used to check the performance of a given query. This information
@@ -130,19 +194,10 @@ Running `EXPLAIN ANALYZE` again shows that the total duration has dropped signif
 ```bash
 docker start idx-mysql-local
 ```
-Since the `.env` file used to store database credentials is not included in the repo, it will need to be created locally at `/backend/.env`:
-```bash
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=[password]
-DB_NAME=rets
-DB_PORT=3306
-SERVER_PORT=5000
-```
+
 ### 2. Node.js/Express
 ```bash
 cd backend
-npm install
 npm run dev
 ```
 Server should start on `http://localhost:5000`. 
@@ -150,7 +205,6 @@ Server should start on `http://localhost:5000`.
 ### 3. React.js
 ```bash
 cd frontend
-npm install
 npm run dev
 ```
 The application should start on `http://localhost:3000`.
@@ -213,6 +267,26 @@ curl http://localhost:5000/api/properties?limit=[num]&offset=[num]&sortBy=[field
 ```
 Users should replace the placeholders in brackets, and only including the parameters needed, as all are optional.
 
+---
+
+#### Example Request
+```bash
+curl http://localhost:5000/api/properties?city=Santa%20Cruz
+```
+
+#### Example Response:
+```bash
+{
+    "total": 116,
+    "limit": 20,
+    "offset": 0,
+    "results": [{
+        "ListingID": ...
+        ...
+        }, {}, ...]
+}
+```
+
 ### `GET /api/properties/:id`
 An endpoint that, given a property's ID, returns all the data associated with that property.
 
@@ -231,6 +305,24 @@ To access the endpoint:
 curl http://localhost:5000/api/properties/[id]
 ```
 
+---
+
+#### Example Request
+```bash
+curl http://localhost:5000/api/properties/1000291026
+```
+
+#### Example Response:
+```bash
+{
+    "results": [{
+        "id": ...,
+        "L_ListingID": 1000291026,
+        ...
+        }]
+}
+```
+
 ### `GET /api/properties/:id/openhouses`
 An endpoint that returns all the openhouse events for a given property ID. If that property has no openhouse events, an empty array is returned.
 
@@ -246,3 +338,33 @@ To access the endpoint:
 ```bash
 curl http://localhost:5000/api/properties/[id]/openhouses
 ```
+
+---
+
+#### Example Request
+```bash
+curl http://localhost:5000/api/properties/1174690153/openhouses
+```
+
+#### Example Response:
+```bash
+{
+    "openhouses": [{
+        "id": ...,
+        "L_ListingID": 1174690153,
+        ...
+        }]
+}
+```
+
+## Database Schema
+### Tables
+With the MLS data provided, there are two tables: `rets_property` and `rets_openhouse`. 
+* `rets_property` — stores the bulk of property details, e.g. city, address, price
+* `rets_openhouse` — stores details about openhouse events for each property
+### Schema — EER Diagram
+![EER Diagram](/frontend/public/rets_schema.png)
+
+## Known Issues
+### Optimization
+Application load times are longer than ideal, especially when changing the sorting parameter or displaying listings as ascending/descending.
