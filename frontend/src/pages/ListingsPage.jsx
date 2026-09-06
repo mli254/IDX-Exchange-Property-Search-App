@@ -9,7 +9,7 @@ import Pagination from "../components/Pagination";
 
 // removes any params with empty values and trims string params
 function cleanParams(filter) {
-  for (let [key, value] of Object.entries(filter)) {
+  for (const [key, value] of Object.entries(filter)) {
     if (!value) {
       continue;
     }
