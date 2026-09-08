@@ -21,5 +21,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setup.js',
+    coverage: {
+      enabled: true,
+      exclude: ['**/utils/helper.js', '**/components/PropertyImageCarousel.jsx']
+    },
   },
 });
